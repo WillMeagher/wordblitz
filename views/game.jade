@@ -1,48 +1,88 @@
 extends layout
 
 block content
-  h1= title
-  div.d-flex
+  div.text-center.top-60
+    h1= title
     - var first = true;
     - var allCorrect = false;
     - var allGuesses = true;
+    div.mt-3
+        each word in game.guesses
+            div.text-center
+                if (word == null && first && !allCorrect)
+                    - allGuesses = false;
+                    form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
+                        input.cur-input.h2.m-1(type="text", name="1", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off", autofocus="autofocus")
+                        input.cur-input.h2.m-1(type="text", name="2", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+                        input.cur-input.h2.m-1(type="text", name="3", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+                        input.cur-input.h2.m-1(type="text", name="4", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+                        input.cur-input.h2.m-1(type="text", name="5", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+                        input(type="submit", style="display: none")
+                        - first = false;
+                else if (word == null)
+                    input.h2.m-1(readonly, tabindex="-1")
+                    input.h2.m-1(readonly, tabindex="-1")
+                    input.h2.m-1(readonly, tabindex="-1")
+                    input.h2.m-1(readonly, tabindex="-1")
+                    input.h2.m-1(readonly, tabindex="-1")
+                else
+                    - allCorrect = true;
+                    form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
+                    each char in word
+                        if (char.accuracy == "correct")
+                            input.h2.m-1.success(type="text", name="1", value=char.char, readonly, tabindex="-1")
+                        else if (char.accuracy == "close")
+                            - allCorrect = false;    
+                            input.h2.m-1.warning(type="text", name="1", value=char.char, readonly, tabindex="-1")
+                        else
+                            - allCorrect = false;    
+                            input.h2.m-1.danger(type="text", name="1", value=char.char, readonly, tabindex="-1")
+    div.spacer
+        if (allGuesses)
+            p.mt-3.answer
+                | The word was 
+                strong #{game.word}
+        if (allGuesses || allCorrect)
+            div.mt-3
+                button.btn.btn-info(onclick="window.location.href='/game'") Play Again
+        if (warning != null)
+            p #{warning}
 
-    each word in game.guesses
-        div.d-flex.m-3
-            if (word == null && first && !allCorrect)
-                - allGuesses = false; 
-                form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
-                    input(type="text", name="1", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
-                    input(type="text", name="2", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
-                    input(type="text", name="3", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
-                    input(type="text", name="4", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
-                    input(type="text", name="5", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
-                    input(type="submit", value="submit")
-                    - first = false;
-            else if (word == null)
-                input(type="text", name="1", maxlength="1", style="width:10px; height:20px", readonly)
-                input(type="text", name="2", maxlength="1", style="width:10px; height:20px", readonly)
-                input(type="text", name="3", maxlength="1", style="width:10px; height:20px", readonly)
-                input(type="text", name="4", maxlength="1", style="width:10px; height:20px", readonly)
-                input(type="text", name="5", maxlength="1", style="width:10px; height:20px", readonly)
-            else
-                - allCorrect = true;
-                form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
-                each char in word
-                    if (char.accuracy == "correct")
-                        input.bg-success(type="text", name="1", style="width:10px; height:20px; background-color: green;", value=char.char, readonly)
-                    else if (char.accuracy == "close")
-                        - allCorrect = false;    
-                        input.bg-warning(type="text", name="1", style="width:10px; height:20px; background-color: yellow;", value=char.char, readonly)
-                    else
-                        - allCorrect = false;    
-                        input.bg-danger(type="text", name="1", style="width:10px; height:20px; background-color: red;", value=char.char, readonly)
-    if (allGuesses)
-        p 
-        | The word was 
-        strong #{game.word}
-    if (allGuesses || allCorrect)
-        p
-        a(href=process.env.APP_URL + '/game') Play Again
-    if (warning != null)
-        p #{warning}
+    if (!(allGuesses || allCorrect))
+        div#keyboard.top-100.mb-2
+            div.d-flex.justify-content-center
+                div.key(onclick="press(event, this)") q
+                div.key(onclick="press(event, this)") w
+                div.key(onclick="press(event, this)") e
+                div.key(onclick="press(event, this)") r 
+                div.key(onclick="press(event, this)") t
+                div.key(onclick="press(event, this)") y
+                div.key(onclick="press(event, this)") u
+                div.key(onclick="press(event, this)") i
+                div.key(onclick="press(event, this)") o
+                div.key(onclick="press(event, this)") p
+
+            div.d-flex.justify-content-center
+                div.key(onclick="press(event, this)") a
+                div.key(onclick="press(event, this)") s
+                div.key(onclick="press(event, this)") d
+                div.key(onclick="press(event, this)") f
+                div.key(onclick="press(event, this)") g
+                div.key(onclick="press(event, this)") h
+                div.key(onclick="press(event, this)") j
+                div.key(onclick="press(event, this)") k
+                div.key(onclick="press(event, this)") l
+
+            div.d-flex.justify-content-center
+                div.key(mousedown="press(event, this)") z
+                div.key(onclick="press(event, this)") x
+                div.key(onclick="press(event, this)") c
+                div.key(onclick="press(event, this)") v
+                div.key(onclick="press(event, this)") b
+                div.key(onclick="press(event, this)") n
+                div.key(onclick="press(event, this)") m
+                div.key &#10229;
+
+            div.d-flex.justify-content-center
+                div.key.space _
+        

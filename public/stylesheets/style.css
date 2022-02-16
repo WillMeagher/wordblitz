@@ -6,3 +6,77 @@ body {
 a {
   color: #00B7FF;
 }
+
+input {
+  text-align: center;
+  width: 60px;
+  height: 60px;
+  caret-color: transparent;
+}
+
+input::selection {
+  background: #fff;
+}
+
+.success {
+  background-color: #bfe470;
+}
+
+.warning {
+  background-color: #ffff82;
+}
+
+.danger {
+  background-color: #ff0101ab;
+}
+
+.filler {
+  width: 60px;
+  height: 60px;
+  border: 1px solid black;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.key {
+  width: 40px;
+  height: 50px;
+  border-radius: 3px;
+  border: 1px solid black;
+  font-size: 26px;
+  margin: 4px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.key:hover {
+  background-color: rgb(221, 221, 221);
+  cursor: pointer;
+}
+
+.space {
+  width: 200px;
+}
+
+.text {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.spacer {
+  height: 105px;
+}
+
+.top-60 {
+  margin-top: 60px;
+}
+
+.answer {
+  font-size: 24px;
+}
