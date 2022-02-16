@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="/css/bootstrap.min.css")
+
+  body
+    if (typeof user === 'undefined')
+      a(href=process.env.APP_URL + '/login') Login
+    else 
+      p #{user.name}
+    hr
+    block content

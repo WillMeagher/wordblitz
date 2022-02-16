@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  h1= title
+  div.d-flex
+    - var first = true;
+    - var allCorrect = false;
+    - var allGuesses = true;
+
+    each word in game.guesses
+        div.d-flex.m-3
+            if (word == null && first && !allCorrect)
+                - allGuesses = false; 
+                form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
+                    input(type="text", name="1", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
+                    input(type="text", name="2", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
+                    input(type="text", name="3", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
+                    input(type="text", name="4", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
+                    input(type="text", name="5", maxlength="1", style="width:10px; height:20px", onkeyup="this.value = this.value.replace(/[^a-z]/, '')")
+                    input(type="submit", value="submit")
+                    - first = false;
+            else if (word == null)
+                input(type="text", name="1", maxlength="1", style="width:10px; height:20px", readonly)
+                input(type="text", name="2", maxlength="1", style="width:10px; height:20px", readonly)
+                input(type="text", name="3", maxlength="1", style="width:10px; height:20px", readonly)
+                input(type="text", name="4", maxlength="1", style="width:10px; height:20px", readonly)
+                input(type="text", name="5", maxlength="1", style="width:10px; height:20px", readonly)
+            else
+                - allCorrect = true;
+                form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
+                each char in word
+                    if (char.accuracy == "correct")
+                        input.bg-success(type="text", name="1", style="width:10px; height:20px; background-color: green;", value=char.char, readonly)
+                    else if (char.accuracy == "close")
+                        - allCorrect = false;    
+                        input.bg-warning(type="text", name="1", style="width:10px; height:20px; background-color: yellow;", value=char.char, readonly)
+                    else
+                        - allCorrect = false;    
+                        input.bg-danger(type="text", name="1", style="width:10px; height:20px; background-color: red;", value=char.char, readonly)
+    if (allGuesses)
+        p 
+        | The word was 
+        strong #{game.word}
+    if (allGuesses || allCorrect)
+        p
+        a(href=process.env.APP_URL + '/game') Play Again
+    if (warning != null)
+        p #{warning}
