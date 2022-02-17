@@ -10,24 +10,26 @@ block content
         each word in game.guesses
             div.text-center
                 if (word == null && first && !allCorrect)
+
                     - allGuesses = false;
-                    form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
-                        input.cur-input.h2.m-1(type="text", name="1", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off", autofocus="autofocus")
-                        input.cur-input.h2.m-1(type="text", name="2", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
-                        input.cur-input.h2.m-1(type="text", name="3", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
-                        input.cur-input.h2.m-1(type="text", name="4", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
-                        input.cur-input.h2.m-1(type="text", name="5", maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+                    form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess/" + len)
+
+                        - for(var i = 0; i < len; i++)
+                            - if (i == 0)
+                                input.cur-input.h2.m-1(type="text", name=i, maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off", autofocus="autofocus")
+                            - else
+                                input.cur-input.h2.m-1(type="text", name=i, maxlength="1", onkeyup="next(this)", onclick="this.select()", autocomplete="off")
+
                         input(type="submit", style="display: none")
                         - first = false;
+
                 else if (word == null)
-                    input.h2.m-1(readonly, tabindex="-1")
-                    input.h2.m-1(readonly, tabindex="-1")
-                    input.h2.m-1(readonly, tabindex="-1")
-                    input.h2.m-1(readonly, tabindex="-1")
-                    input.h2.m-1(readonly, tabindex="-1")
+
+                    - for(var i = 0; i < len; i++)
+                        input.h2.m-1(readonly, tabindex="-1")
+
                 else
                     - allCorrect = true;
-                    form(name="guess", method="post", action=process.env.APP_URL + "/game/guess")
                     each char in word
                         if (char.accuracy == "correct")
                             input.h2.m-1.success(type="text", name="1", value=char.char, readonly, tabindex="-1")
@@ -38,13 +40,13 @@ block content
                             - allCorrect = false;    
                             input.h2.m-1.danger(type="text", name="1", value=char.char, readonly, tabindex="-1")
     div.spacer
-        if (allGuesses)
+        if (allGuesses && !allCorrect)
             p.mt-3.answer
                 | The word was 
                 strong #{game.word}
         if (allGuesses || allCorrect)
             div.mt-3
-                button.btn.btn-info(onclick="window.location.href='/game'") Play Again
+                button.btn.btn-info(onclick="window.location.href='/game/#{len}'") Play Again
         if (warning != null)
             p #{warning}
 

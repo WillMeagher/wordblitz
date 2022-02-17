@@ -3,20 +3,16 @@ dbo.connectToServer(err => {if (err) {console.log(err)}});
 var consts = require('./constants');
 
 module.exports = {
-    getNewAnswer: async function (len = 5) {
-        if (len <= consts.MAX_WORD_LEN && len >= consts.MIN_WORD_LEN) {
-            const db = dbo.getDb();
-            words = (await db.collection('words').findOne({type: "answers"})).words[len];
-            return words[Math.floor(Math.random()*words.length)];
-        } else {
-            throw new Error('len of answer out of bounds');
-        }
+    getNewAnswer: async function (len) {
+        const db = dbo.getDb();
+        words = (await db.collection('words').findOne({type: "answers"})).words[len];
+        return words[Math.floor(Math.random()*words.length)];
     },
 
-    validWord: async function (word) {
-        if (word.length <= consts.MAX_WORD_LEN && word.length >= consts.MIN_WORD_LEN) {
+    validWord: async function (word, len) {
+        if (word.length == len) {
             query = {}
-            query['words.' + word.length] = word
+            query['words.' + len] = word
 
             const db = dbo.getDb();
             return /^[a-z]+$/.test(word) && await db.collection('words').findOne(query) != null; 
@@ -45,14 +41,8 @@ module.exports = {
         user = {
             email: email,
             created: new Date(),
-            '1': 0,
-            '2': 0,
-            '3': 0,
-            '4': 0,
-            '5': 0,
-            '6': 0,
-            loss: 0,
-            game: null
+            scores: consts.DEFAULT_SCORES,
+            games: consts.DEFAULT_GAME,
         };
         console.log("creating user");
         await db.collection('users').insertOne(user);
@@ -71,29 +61,32 @@ module.exports = {
     startGame: async function (email, len) {
         newGame = {
             guesses: new Array(6).fill(null),
-            word: await this.getNewAnswer()
+            word: await this.getNewAnswer(len)
         };
 
         if (!await this.userExists(email)) {
             await this.createUser(email);
         }
 
-        await this.updateGame(email, newGame);
+        await this.updateGame(email, newGame, len);
     },
 
-    inGame: async function (email) {
-        return (await this.userExists(email) && (await this.getUser(email)).game != null); 
+    inGame: async function (email, len) {
+        return (await this.userExists(email) && (await this.getUser(email)).games[len] != null); 
     },
 
-    updateGame: async function (email, game) {
+    updateGame: async function (email, game, len) {
         const db = dbo.getDb();
-        await db.collection('users').updateOne({email: email}, {$set: {"game": game}});
+        query = {$set: {}};
+        query.$set['games.' + len] = game
+
+        await db.collection('users').updateOne({email: email}, query);
     },
 
-    gameOver: async function (email) {
+    gameOver: async function (email, len) {
         user = await this.getUser(email);
         guesses = 1;
-        for (const guess of user.game.guesses) {
+        for (const guess of user.games[len].guesses) {
             if (guess == null) {
                 return false;
             } else {
@@ -102,9 +95,9 @@ module.exports = {
                     thisGuess += letter.char;
                 }
 
-                if (thisGuess == user.game.word) {
-                    user[guesses] += 1;
-                    user.game = null;
+                if (thisGuess == user.games[len].word) {
+                    user.scores[len][guesses] += 1;
+                    user.games[len] = null;
                     await this.setUser(email, user);
                     console.log("game over");
                     return true;
@@ -112,8 +105,8 @@ module.exports = {
             }
             guesses ++;
         }
-        user.loss += 1;
-        user.game = null;
+        user.scores[len].failed += 1;
+        user.games[len] = null;
         await this.setUser(email, user);
         console.log("game over");
         return true;
@@ -121,18 +114,18 @@ module.exports = {
 
     makeGuess: async function (email, word, len) {
         user = await this.getUser(email);
-        if (await this.validWord(word) && !await this.gameOver(email)) {
+        if (await this.validWord(word, len) && !await this.gameOver(email, len)) {
             set = false;
-            user.game.guesses = user.game.guesses.map(guess => {
+            user.games[len].guesses = user.games[len].guesses.map(guess => {
                 if (!set && guess == null) {
                     set = true;
                     return word.split("").map(function(char, index) {
-                        if (user.game.word[index] == char) {
+                        if (user.games[len].word[index] == char) {
                             return {
                                 accuracy: "correct",
                                 char: char
                             };
-                        } else if (user.game.word.includes(char)) {
+                        } else if (user.games[len].word.includes(char)) {
                             return {
                                 accuracy: "close",
                                 char: char

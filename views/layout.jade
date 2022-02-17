@@ -6,17 +6,19 @@ html
     link(rel="stylesheet", href="/css/bootstrap.min.css")
     link(rel="stylesheet", href='/css/font-awesome.min.css')
     script(src="/javascripts/next.js")
-    // link(rel="stylesheet", href='/css/all.css')
 
   body.pb-0.pt-4
     div.d-flex.justify-content-between
       div
-        a(href=process.env.APP_URL, style="color: inherit;")
+        a.me-3(href=process.env.APP_URL, style="color: inherit;")
           i.fa.fa-home.fa-lg
+        a(href=process.env.APP_URL, style="color: inherit;")
+          i.fa.fa-play.fa-lg  
       div.ml-auto
         if (typeof user === 'undefined')
           a(href=process.env.APP_URL + '/login') Login
         else 
           div #{user.name}
+
     hr
     block content

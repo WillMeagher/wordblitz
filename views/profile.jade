@@ -4,12 +4,14 @@ block content
   h1= title
   p Welcome #{user.name}
 
-  p 1 Guess: #{user['1']}
-  p 2 Guess: #{user['2']}
-  p 3 Guess: #{user['3']}
-  p 4 Guess: #{user['4']}
-  p 5 Guess: #{user["5"]}
-  p 6 Guess: #{user["6"]}
-  p Failed: #{user.loss}
+  div.d-flex
+    each vals, length in user.scores
+      div.m-3
+        h3 #{length} letters
+        each val, key in vals
+          if (key == "failed")
+            p #{key} : #{val}
+          else
+            p #{key} Guesses: #{val}
 
   a(href=process.env.APP_URL + '/game') Play

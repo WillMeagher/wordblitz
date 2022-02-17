@@ -4,7 +4,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Wills Wacky Wordle' });
+  res.render('index', { title: 'Wordle' });
 });
 
 module.exports = router;

@@ -3,7 +3,12 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  p
-    a(href=process.env.APP_URL + '/game') Play
-  p
+  div
+    a(href=process.env.APP_URL + '/game/4') Play 4 Letter
+  div
+    a(href=process.env.APP_URL + '/game/5') Play 5 Letter
+  div
+    a(href=process.env.APP_URL + '/game/6') Play 6 Letter
+
+  div.mt-3
     a(href=process.env.APP_URL + '/profile') Profile
