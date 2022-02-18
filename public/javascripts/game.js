@@ -13,7 +13,7 @@ function select (_this) {
 }
 
 function inputEntered(_this) {
-    // _this.value = _this.value.replace(/^\D/g, "")
+    _this.value = _this.value.replace(/[^a-z ]/g, "")
     updateUi(_this.value)
     updateHighlight()
 }
@@ -53,7 +53,7 @@ function updateHighlight() {
 }
 
 function removeHighlight() {
-    elements=document.getElementsByClassName(FOCUS_CLASS)
+    elements = document.getElementsByClassName(FOCUS_CLASS)
 
     for(element of elements){
         element.classList.remove(FOCUS_CLASS)

@@ -10,6 +10,11 @@ block content
     - var first = true;
     - var allCorrect = false;
     - var allGuesses = true;
+    - var charColors = {};
+    - var topRow = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
+    - var middleRow = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
+    - var bottomRow = ["z", "x", "c", "v", "b", "n", "m", "⟵"];
+
     div.mt-3
         each word in game.guesses
             div.d-flex.justify-content-center.text-center
@@ -18,12 +23,15 @@ block content
                     - allCorrect = true;
                     each char in word
                         if (char.accuracy == "correct")
+                            - charColors[char.char] = "success";
                             div.input.success #{char.char}
                         else if (char.accuracy == "close")
+                            - if (charColors[char.char] == undefined || charColors[char.char] == "danger") charColors[char.char] = "warning";
                             - allCorrect = false;    
                             div.input.warning #{char.char}
                         else
-                            - allCorrect = false;    
+                            - if (charColors[char.char] == undefined) charColors[char.char] = "danger";
+                            - allCorrect = false;
                             div.input.danger #{char.char}
 
                 else if (first && !allCorrect)
@@ -31,7 +39,7 @@ block content
                     - allGuesses = false;
                     form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess/" + len)
                         div(style="height: 0px; width: 0px;")
-                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="removeNext(this, event)", onkeyup="inputEntered(this)")
+                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="removeNext(this, event)", onkeyup="inputEntered(this, event)")
                             input(type="submit", style="display: none")
 
                     - for(var i = 0; i < len; i++)
@@ -60,37 +68,16 @@ block content
     if (!(allGuesses || allCorrect))
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
-                div.key(onclick="press(event, this)") q
-                div.key(onclick="press(event, this)") w
-                div.key(onclick="press(event, this)") e
-                div.key(onclick="press(event, this)") r 
-                div.key(onclick="press(event, this)") t
-                div.key(onclick="press(event, this)") y
-                div.key(onclick="press(event, this)") u
-                div.key(onclick="press(event, this)") i
-                div.key(onclick="press(event, this)") o
-                div.key(onclick="press(event, this)") p
+                each char in topRow
+                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
 
             div.d-flex.justify-content-center
-                div.key(onclick="press(event, this)") a
-                div.key(onclick="press(event, this)") s
-                div.key(onclick="press(event, this)") d
-                div.key(onclick="press(event, this)") f
-                div.key(onclick="press(event, this)") g
-                div.key(onclick="press(event, this)") h
-                div.key(onclick="press(event, this)") j
-                div.key(onclick="press(event, this)") k
-                div.key(onclick="press(event, this)") l
+                each char in middleRow
+                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
 
             div.d-flex.justify-content-center
-                div.key(mousedown="press(event, this)") z
-                div.key(onclick="press(event, this)") x
-                div.key(onclick="press(event, this)") c
-                div.key(onclick="press(event, this)") v
-                div.key(onclick="press(event, this)") b
-                div.key(onclick="press(event, this)") n
-                div.key(onclick="press(event, this)") m
-                div.key &#10229;
+                each char in bottomRow
+                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
 
             div.d-flex.justify-content-center
                 div.key.space _
