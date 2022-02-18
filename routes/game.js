@@ -37,8 +37,7 @@ router.post('/guess/:len', async function(req, res, next) {
   db = res.locals.db;
   len = req.params.len
 
-  guess = Object.values(req.body).join('').toLowerCase();
-  await db.makeGuess(res.locals.user.email, guess, len);
+  await db.makeGuess(res.locals.user.email, req.body.guess, len);
 
   res.redirect('/game/' + len);
 });

@@ -2,10 +2,10 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/styles.css')
     link(rel="stylesheet", href="/css/bootstrap.min.css")
     link(rel="stylesheet", href='/css/font-awesome.min.css')
-    script(src="/javascripts/next.js")
+    block head
 
   body.pb-0.pt-4
     div.d-flex.justify-content-between
@@ -17,8 +17,9 @@ html
       div.ml-auto
         if (typeof user === 'undefined')
           a(href=process.env.APP_URL + '/login') Login
-        else 
-          div #{user.name}
+        else
+          a(href=process.env.APP_URL + '/profile', style="color: inherit;")
+            div #{user.name}
 
     hr
     block content
