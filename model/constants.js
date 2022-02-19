@@ -11,6 +11,8 @@ module.exports = {
             '5': 0,
             '6': 0,
             failed: 0,
+            gamesPlayed: 0,
+            totalScore: 0,
         },
         '5': {
             '1': 0,
@@ -20,6 +22,8 @@ module.exports = {
             '5': 0,
             '6': 0,
             failed: 0,
+            gamesPlayed: 0,
+            totalScore: 0,
         },
         '6': {
             '1': 0,
@@ -29,6 +33,8 @@ module.exports = {
             '5': 0,
             '6': 0,
             failed: 0,
+            gamesPlayed: 0,
+            totalScore: 0,
         },
     },
     DEFAULT_GAME: {

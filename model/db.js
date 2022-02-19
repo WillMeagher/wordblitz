@@ -97,6 +97,8 @@ module.exports = {
 
                 if (thisGuess == user.games[len].word) {
                     user.scores[len][guesses] += 1;
+                    user.scores[len].gamesPlayed += 1;
+                    user.scores[len].totalScore += guesses;
                     user.games[len] = null;
                     await this.setUser(email, user);
                     console.log("game over");
@@ -106,6 +108,8 @@ module.exports = {
             guesses ++;
         }
         user.scores[len].failed += 1;
+        user.scores[len].gamesPlayed += 1;
+        user.scores[len].totalScore += 8;
         user.games[len] = null;
         await this.setUser(email, user);
         console.log("game over");
