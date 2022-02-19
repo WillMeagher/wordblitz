@@ -37,8 +37,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-app.use('/css', express.static(__dirname + '/node_modules/font-awesome/css'));
-app.use('/fonts', express.static(__dirname + '/node_modules/font-awesome/fonts'));
+app.use('/css', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/css'));
+app.use('/webfonts', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts'));
 
 app.use(async function (req, res, next) {
   res.locals.user = req.oidc.user;
