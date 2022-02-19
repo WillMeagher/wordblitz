@@ -10,7 +10,7 @@ router.use(requiresAuth(), async function (req, res, next) {
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  res.redirect(req.originalUrl + "/" + consts.DEFAULT_WORD_LEN)
+  res.redirect(req.originalUrl + "/" + consts.DEFAULT_WORD_LEN);
 });
 
 /* GET home page. */
@@ -36,12 +36,12 @@ router.get('/:len', async function(req, res, next) {
 
 router.post('/guess/:len', async function(req, res, next) {
   db = res.locals.db;
-  len = req.params.len
+  len = req.params.len;
   guess = req.body.guess;
 
   if (!await db.validWord(guess, len)) {
     console.log("Invalid Guess"); 
-    res.status(204).send()
+    res.status(204).send();
   } else {
     await db.makeGuess(email, req.body.guess, len);
     res.redirect('/game/' + len);
