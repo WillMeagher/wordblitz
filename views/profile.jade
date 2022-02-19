@@ -1,23 +1,36 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome #{user.name}
+  div
+    h1.ms-auto.me-auto= title
 
-  div.d-flex
+  div
     each vals, length in user.scores
-      - totalPlays = 0;
-      - totalScore = 0;
-      div.m-3
-        h3 #{length} letters
-        each val, key in vals
-          - totalPlays += val;
-          - totalScore += ((key != "failed") ? key : 8) * val;
-          if (key == "failed")
-            p #{key} : #{val}
-          else
-            p #{key} Guesses: #{val}
-        p Games Played : #{totalPlays}
-        p Average Score : #{Math.round(((totalScore / totalPlays) + Number.EPSILON) * 100) / 100}
+      - var totalPlays = 0;
+      - var totalScore = 0;
+      - var averageScore = 0;
 
-  a(href=process.env.APP_URL + '/game') Play
+      each val, key in vals
+        - totalPlays += val;
+        - totalScore += ((key != "failed") ? key : 8) * val;
+      - averageScore = Math.round(((totalScore / totalPlays) + Number.EPSILON) * 100) / 100;
+
+      a(href=process.env.APP_URL + '/game/' + length, style="color: inherit; text-decoration: none;")
+        h3 #{length} Letters
+
+      div.m-3.d-flex(style="min-height: 250px;")
+        div.detail.mt-auto
+          p.m-2.text-center Guesses:
+
+        each val, key in vals
+          div.detail.mt-auto(style="min-width: 60px")
+            div
+              p.m-1.text-center #{val}
+            div.bar.bg-secondary.ms-auto.me-auto(style="height: #{Math.max(Math.round((val / totalScore) * 1400), 5)}px; width: 80%;")
+            div
+              p.m-2.text-center #{key}
+
+        div.detail.mt-auto.mb-auto
+          p.m-2 Games Played : #{totalPlays}
+          p.m-2 Average Score : #{averageScore}
+
