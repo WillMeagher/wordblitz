@@ -7,6 +7,8 @@ router.use(requiresAuth(), async function (req, res, next) {
 });
 
 router.get('/', requiresAuth(), async function (req, res, next) {
+  db = res.locals.db;
+  
   await db.updateUser(res);
 
   res.render('profile', {
