@@ -6,12 +6,18 @@ block content
 
   div.d-flex
     each vals, length in user.scores
+      - totalPlays = 0;
+      - totalScore = 0;
       div.m-3
         h3 #{length} letters
         each val, key in vals
+          - totalPlays += val;
+          - totalScore += ((key != "failed") ? key : 8) * val;
           if (key == "failed")
             p #{key} : #{val}
           else
             p #{key} Guesses: #{val}
+        p Games Played : #{totalPlays}
+        p Average Score : #{Math.round(((totalScore / totalPlays) + Number.EPSILON) * 100) / 100}
 
   a(href=process.env.APP_URL + '/game') Play
