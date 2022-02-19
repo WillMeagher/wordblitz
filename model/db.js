@@ -21,16 +21,6 @@ module.exports = {
         }
     },
 
-    updateUser: async function (res) {
-        userInfo = await this.getUser(res.locals.user.email);
-        if (typeof userInfo === 'undefined') {
-          userInfo = await this.createUser(res.locals.user.email);
-        }
-        for (const [key, value] of Object.entries(userInfo)) {
-          res.locals.user[key] = value;
-        }
-    },
-
     setUser: async function(email, user) {
         const db = dbo.getDb();
         await db.collection('users').updateOne({email: email}, {$set: user});

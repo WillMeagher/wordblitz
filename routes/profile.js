@@ -15,11 +15,11 @@ router.use(requiresAuth(), async function (req, res, next) {
 
 router.get('/', async function (req, res, next) {
   db = res.locals.db;
-  
-  await db.updateUser(res);
+  email = res.locals.user.email;
 
   res.render('profile', {
     title: 'Profile Page',
+    user: await db.getUser(email)
   });
 });
 

@@ -31,14 +31,14 @@ router.get('/:len', async function(req, res, next) {
     await db.startGame(email, len);
   }
 
-  console.log("started game")
-  
-  await db.updateUser(res);
-
   game = (await db.getUser(email)).games[len];
   gameOver = await db.gameOver(email, len);
 
-  res.render('game', { title: process.env.APP_NAME, game: game, len: len });
+  res.render('game', { 
+    title: process.env.APP_NAME, 
+    game: game, 
+    len: len,
+  });
 });
 
 router.post('/guess/:len', async function(req, res, next) {
