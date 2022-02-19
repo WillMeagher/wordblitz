@@ -13,7 +13,8 @@ block content
     - var charColors = {};
     - var topRow = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
     - var middleRow = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
-    - var bottomRow = ["z", "x", "c", "v", "b", "n", "m", "⟵"];
+    - var bottomRow = ["z", "x", "c", "v", "b", "n", "m"];
+    - var defaultGuess = new Array(parseInt(len, 10)).fill(" ").join("");
 
     div.mt-3
         each word in game.guesses
@@ -37,16 +38,16 @@ block content
                 else if (first && !allCorrect)
 
                     - allGuesses = false;
-                    form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess/" + len)
+                    form#answer-form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess/" + len)
                         div(style="height: 0px; width: 0px;")
-                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="removeNext(this, event)", onkeyup="inputEntered(this, event)")
+                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="onKeyDownGuess(this, event)", onkeyup="inputEntered(this, event)")
                             input(type="submit", style="display: none")
 
                     - for(var i = 0; i < len; i++)
                         - if (i == 0)
-                            div.input.cur-input.focus(id="select"+i, onclick="select(this)")
+                            div.input.cur-input.focus(id="select"+i, onclick="onClickSelect(this)")
                         - else
-                            div.input.cur-input(id="select"+i, onclick="select(this)")
+                            div.input.cur-input(id="select"+i, onclick="onClickSelect(this)")
 
                     - first = false;
 
@@ -69,16 +70,22 @@ block content
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
                 each char in topRow
-                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
 
             div.d-flex.justify-content-center
                 each char in middleRow
-                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
 
             div.d-flex.justify-content-center
+                div.key(onclick="onClickKey(event, this)")
+                    i.fa.fa-level-down-alt.fa-rotate-90
+
                 each char in bottomRow
-                    div.key(class="#{charColors[char]}", onclick="press(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
+
+                div.key(onclick="onClickKey(event, this)")
+                    i.fa.fa-backspace
 
             div.d-flex.justify-content-center
-                div.key.space _
+                div.key.space(onclick="onClickKey(event, this)") _
         
