@@ -119,13 +119,35 @@ module.exports = {
             user.games[len].guesses = user.games[len].guesses.map(guess => {
                 if (!set && guess == null) {
                     set = true;
-                    return word.split("").map(function(char, index) {
-                        if (user.games[len].word[index] == char) {
+                    answer = user.games[len].word;
+                    word = word.split("")
+
+                    // set greens
+                    word = word.map(function(char, index) {
+                        if (answer[index] == char) {
+                            // remove chararaters from string to prevent repeat "matches"
+                            answer = answer.split("");
+                            answer[index] = " ";
+                            answer = answer.join("");
+
                             return {
                                 accuracy: "correct",
                                 char: char
                             };
-                        } else if (user.games[len].word.includes(char)) {
+                        } else {
+                            return char
+                        }
+                    });
+
+                    // set yellows and reds
+                    return word.map(function(char, index) {
+                        if (char.constructor == Object) {
+                            return char;
+                        } else if (answer.includes(char)) {
+                            answer = answer.split("");
+                            answer[index] = " ";
+                            answer = answer.join("");
+
                             return {
                                 accuracy: "close",
                                 char: char
@@ -141,10 +163,7 @@ module.exports = {
                     return guess;
                 }
             });
-            console.log(user)
             await this.setUser(email, user)
-        } else {
-            console.log("Invalid Guess"); 
         }
     }
 }
