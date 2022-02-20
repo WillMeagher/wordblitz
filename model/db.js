@@ -74,11 +74,39 @@ module.exports = {
     },
 
     gameOver: async function (email, len) {
+        if (!await this.inGame(email, len)) {
+            return false;
+        }
         user = await this.getUser(email);
         guesses = 1;
         for (const guess of user.games[len].guesses) {
             if (guess == null) {
                 return false;
+            } else {
+                thisGuess = "";
+
+                for (const [key, letter] of Object.entries(guess)) {
+                    thisGuess += letter.char;
+                }
+
+                if (thisGuess == user.games[len].word) {
+                    return true;
+                }
+            }
+            guesses ++;
+        }
+        return true;
+    },
+
+    endGame: async function (email, len) {
+        if (!await this.inGame(email, len)) {
+            return;
+        }
+        user = await this.getUser(email);
+        guesses = 1;
+        for (const guess of user.games[len].guesses) {
+            if (guess == null) {
+                return;
             } else {
                 thisGuess = "";
                 for (const [key, letter] of Object.entries(guess)) {
@@ -92,7 +120,7 @@ module.exports = {
                     user.games[len] = null;
                     await this.setUser(email, user);
                     console.log("game over");
-                    return true;
+                    return;
                 }
             }
             guesses ++;
@@ -103,13 +131,12 @@ module.exports = {
         user.games[len] = null;
         await this.setUser(email, user);
         console.log("game over");
-        return true;
     },
 
     makeGuess: async function (email, word, len) {
-        user = await this.getUser(email);
-        if (await this.validWord(word, len) && !await this.gameOver(email, len)) {
+        if (await this.validWord(word, len) && await this.inGame(email, len) && !await this.gameOver(email, len)) {
             set = false;
+            user = await this.getUser(email);
             user.games[len].guesses = user.games[len].guesses.map(guess => {
                 if (!set && guess == null) {
                     set = true;

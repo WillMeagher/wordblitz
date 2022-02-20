@@ -32,7 +32,10 @@ router.get('/:len', async function(req, res, next) {
   }
 
   game = (await db.getUser(email)).games[len];
-  gameOver = await db.gameOver(email, len);
+  // end the game if the game is over
+  if (await db.gameOver(email, len)) {
+    await db.endGame(email, len)
+  }
 
   res.render('game', { 
     title: process.env.APP_NAME, 
@@ -45,11 +48,13 @@ router.post('/guess/:len', async function(req, res, next) {
   db = res.locals.db;
   len = req.params.len;
   guess = req.body.guess;
+  email = res.locals.user.email;
 
   if (!await db.validWord(guess, len)) {
     console.log("Invalid Guess"); 
     res.status(204).send();
   } else {
+    // makeGuess only runs if word is valid inGame and !gameOver
     await db.makeGuess(email, req.body.guess, len);
     res.redirect('/game/' + len);
   }
