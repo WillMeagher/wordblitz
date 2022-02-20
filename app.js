@@ -24,6 +24,18 @@ const config = {
   issuerBaseURL: process.env.AUTH_ISSUER_BASE_URL
 };
 
+/*
+var forceSsl = function (req, res, next) {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  return next();
+};
+
+if (process.env.APP_ENV === 'production') {
+  app.use(forceSsl);
+}
+*/
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
 

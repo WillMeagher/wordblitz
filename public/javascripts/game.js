@@ -88,8 +88,6 @@ function updateHighlight() {
     if (elem != null) {
         elem.classList.add(FOCUS_CLASS);
     }
-    
-    console.log(input.value.length);
 }
 
 function removeHighlight() {

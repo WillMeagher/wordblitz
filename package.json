@@ -11,14 +11,15 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.0",
-    "express-openid-connect": "^2.6.0",
+    "express-openid-connect": "^2.7.0",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
-    "mongodb": "^4.3.1",
-    "morgan": "~1.9.1"
+    "jade": "^1.11.0",
+    "mongodb": "^4.4.0",
+    "morgan": "~1.9.1",
+    "uglify-js": "^3.15.1"
   },
   "devDependencies": {
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "font-awesome": "^4.7.0"
   }
 }
