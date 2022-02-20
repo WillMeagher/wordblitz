@@ -39,11 +39,26 @@ function updateBoxContent() {
 }
 
 function onKeyDownGuess(_this, event) {
-    // if letter or space
-    if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) {
+    if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) { 
+        // character or space
         removeNextChar();
-    } else if (event.keyCode == 8) {
+    } else if (event.keyCode == 8) { 
+        // backspace
         backspace();
+        event.preventDefault();
+    } else if (event.keyCode == 46) { 
+        // delete
+        var input_element = document.getElementById(INPUT_ID);
+        var caret_place = input_element.selectionEnd;
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(" ", caret_place);
+            input_element.focus();
+            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
+        } else {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place, caret_place);
+        }
         event.preventDefault();
     }
 }
