@@ -38,7 +38,7 @@ block content
                 else if (first && !allCorrect)
 
                     - allGuesses = false;
-                    form#answer-form.text-center(name="guess", method="post", action=process.env.APP_URL + "/game/guess/" + len)
+                    form#answer-form.text-center(name="guess", method="post", inputmode='none', action=process.env.APP_URL + "/game/guess/" + len)
                         div(style="height: 0px; width: 0px;")
                             input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="onKeyDownGuess(this, event)", onkeyup="inputEntered(this, event)")
                             input(type="submit", style="display: none")
