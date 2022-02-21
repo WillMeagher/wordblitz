@@ -3,6 +3,11 @@ var router = express.Router();
 const { requiresAuth } = require('express-openid-connect');
 
 router.use(requiresAuth(), async function (req, res, next) {
+  if (!res.locals.user.email_verified) {
+    req.error = "Email not verified";
+    return res.redirect(process.env.APP_URL);
+  }
+
   db = res.locals.db;
   email = res.locals.user.email;
 
