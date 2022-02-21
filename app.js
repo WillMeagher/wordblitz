@@ -8,6 +8,7 @@ require('dotenv').config();
 var indexRouter = require('./routes/index');
 var profileRouter = require('./routes/profile');
 var gameRouter = require('./routes/game');
+var leaderboardRouter = require('./routes/leaderboard');
 
 var db = require('./model/db');
 
@@ -61,6 +62,7 @@ app.use(async function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/profile', profileRouter);
 app.use('/game', gameRouter);
+app.use('/leaderboard', leaderboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
