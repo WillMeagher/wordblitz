@@ -3,6 +3,16 @@ const FOCUS_CLASS = "focus";
 const CUR_INPUT_CLASS = "cur-input";
 const FORM_ID = "answer-form";
 
+document.addEventListener('keydown', function (event) {
+    var input_element = document.getElementById(INPUT_ID);
+    if (document.activeElement != input_element && ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32 || event.keyCode == 46 || event.keyCode == 8)) { 
+        var caret_place = input_element.selectionEnd;
+        input_element.focus();
+        input_element.setSelectionRange(caret_place, caret_place);
+        onKeyDownGuess(event);
+    }
+});
+
 function getStrLen() {
     return document.getElementsByClassName(CUR_INPUT_CLASS).length;
 }
@@ -38,7 +48,7 @@ function updateBoxContent() {
     }
 }
 
-function onKeyDownGuess(_this, event) {
+function onKeyDownGuess(event) {
     if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) { 
         // character or space
         removeNextChar();
@@ -106,7 +116,7 @@ function addCharacterAt(character, place) {
     return new_string;
 }
 
-function onClickKey (event, _this) {
+function onClickKey (_this) {
     var input_element = document.getElementById(INPUT_ID);
     var caret_place = input_element.selectionEnd;
 

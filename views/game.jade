@@ -40,7 +40,7 @@ block content
                     - allGuesses = false;
                     form#answer-form.text-center(name="guess", method="post", inputmode='none', action=process.env.APP_URL + "/game/guess/" + len)
                         div(style="height: 0px; width: 0px;")
-                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="onKeyDownGuess(this, event)", onkeyup="inputEntered(this, event)")
+                            input#guess(style="opacity: 0; height: 0; width: 0;", type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="onKeyDownGuess(event)", onkeyup="inputEntered(this, event)")
                             input(type="submit", style="display: none")
 
                     - for(var i = 0; i < len; i++)
@@ -70,22 +70,22 @@ block content
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
                 each char in topRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
                 each char in middleRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
-                div.key(onclick="onClickKey(event, this)")
+                div.key(onclick="onClickKey(this)")
                     i.fa.fa-level-down-alt.fa-rotate-90
 
                 each char in bottomRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(event, this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
-                div.key(onclick="onClickKey(event, this)")
+                div.key(onclick="onClickKey(this)")
                     i.fa.fa-backspace
 
             div.d-flex.justify-content-center
-                div.key.space(onclick="onClickKey(event, this)") _
+                div.key.space(onclick="onClickKey(this)") _
         

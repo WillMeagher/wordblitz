@@ -5,7 +5,6 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   let error = req.cookies["error"];
-  console.log(error);
   res.clearCookie("error", { httpOnly: true });
 
   res.render('index', { 
