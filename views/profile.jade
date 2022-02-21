@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  div
-    h1.ms-auto.me-auto= title
+  div.d-flex
+    h1= title
+    button.btn.btn-info.ms-auto(style="height:40px;", onclick="window.location.href='/logout'") Logout
 
   div
-    each vals, length in user.scores
+    each vals, length in userScores
       a(href=process.env.APP_URL + '/game/' + length, style="color: inherit; text-decoration: none;")
         h3.mt-3.ms-3 #{length} Letters
 

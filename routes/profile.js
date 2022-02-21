@@ -19,7 +19,7 @@ router.get('/', async function (req, res, next) {
 
   res.render('profile', {
     title: 'Profile Page',
-    user: await db.getUser(email)
+    userScores: (await db.getUser(email)).scores
   });
 });
 
