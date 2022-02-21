@@ -1,0 +1,20 @@
+.list-item {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: #f8f8f8;
+    border: 1px solid black;
+    border-radius: 10px;
+    max-width: 850px;
+    width: 90%;
+}
+
+.rank {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+
+.cur_user {
+    border: 2px solid red;
+}

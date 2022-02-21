@@ -1,0 +1,21 @@
+extends layout
+
+block head 
+  link(rel='stylesheet', href='/stylesheets/leaderboard.css')
+
+block content
+  div.d-flex
+    h1.ms-auto.me-auto.mb-3= title
+
+  div
+    each user in leaderboard
+      div.d-flex
+        div.rank.ms-auto.me-3 #{user.rank}
+        if (user.cur_user !== undefined)
+          div.list-item.m-2.me-auto.cur_user
+            div User: #{user.email}
+            div Average Score: #{user.averageScore}
+        else
+          div.list-item.m-2.me-auto
+            div User: #{user.email}
+            div Average Score: #{user.averageScore}

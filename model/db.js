@@ -1,6 +1,7 @@
 var dbo = require('./dbStartup');
 dbo.connectToServer(err => {if (err) {console.log(err)}});
 var consts = require('./constants');
+const { query } = require('express');
 
 module.exports = {
     getNewAnswer: async function (len) {
@@ -186,5 +187,17 @@ module.exports = {
             });
             await this.setUser(email, user)
         }
+    },
+
+    getLeaderboard: async function (len) {
+        const db = dbo.getDb();
+        var query = [
+            {$match: {}},
+            {$project:{email: "$email", totalScore: ("$scores." + len + ".totalScore"), gamesPlayed: ("$scores." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + len + ".totalScore"), ("$scores." + len + ".gamesPlayed")]}}}, 
+            {$sort:{averageScore: 1}}
+        ];
+        query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: 1};
+
+        return await db.collection('users').aggregate(query);
     }
 }
