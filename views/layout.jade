@@ -15,11 +15,11 @@ html
       div
         a.me-3(href=process.env.APP_URL, style="color: inherit;")
           i.fa.fa-home.fa-lg
-        a(href=process.env.APP_URL, style="color: inherit;")
+        a(href=process.env.APP_URL + "/game/5", style="color: inherit;")
           i.fa.fa-play.fa-lg  
       div.ml-auto
         if (typeof user === 'undefined')
-          a(href=process.env.APP_URL + '/login') Login
+          button.btn.btn-info.ms-auto(style="height:40px;", onclick="window.location.href='/login'") Login
         else
           a(href=process.env.APP_URL + '/profile', style="color: inherit;")
             div #{user.name}
