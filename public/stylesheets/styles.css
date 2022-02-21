@@ -2,3 +2,9 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+.error {
+  justify-content: center;
+  color: #761b18;
+  background-color: #f9d6d5;
+}

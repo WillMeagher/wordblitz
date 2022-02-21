@@ -22,11 +22,14 @@ router.get('/', async function (req, res, next) {
   db = res.locals.db;
   email = res.locals.user.email;
 
+  let error = req.cookies["error"];
+  res.clearCookie("error", { httpOnly: true });
+
   res.render('profile', {
     title: 'Profile Page',
-    userScores: (await db.getUser(email)).scores
+    userScores: (await db.getUser(email)).scores,
+    error: error
   });
 });
-
 
 module.exports = router;

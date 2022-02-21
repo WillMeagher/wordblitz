@@ -6,7 +6,7 @@ var consts = require('../model/constants');
 // Middleware to make sure player is playing
 router.use(requiresAuth(), async function (req, res, next) {
   if (!res.locals.user.email_verified) {
-    req.error = "Email not verified";
+    res.cookie("error", "Email not verified", { httpOnly: true });
     return res.redirect(process.env.APP_URL);
   }
 
@@ -42,13 +42,15 @@ router.get('/:len', async function(req, res, next) {
     await db.endGame(email, len)
   }
 
+  error = req.cookies["error"];
+  res.clearCookie("error", { httpOnly: true });
+
   res.render('game', { 
     title: process.env.APP_NAME, 
     game: game, 
     len: len,
-    error: req.error
+    error: error
   });
-  delete req.error;
 });
 
 router.post('/guess/:len', async function(req, res, next) {

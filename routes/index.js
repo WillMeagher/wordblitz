@@ -4,7 +4,14 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Wordle' });
+  let error = req.cookies["error"];
+  console.log(error);
+  res.clearCookie("error", { httpOnly: true });
+
+  res.render('index', { 
+    title: 'Wordle',
+    error: error
+  });
 });
 
 module.exports = router;

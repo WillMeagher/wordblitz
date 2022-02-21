@@ -25,4 +25,8 @@ html
             div #{user.name}
 
     hr
+
+    if (error != undefined)
+      div.error.d-flex.m-2.p-2 #{error}
+
     block content

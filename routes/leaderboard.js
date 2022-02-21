@@ -11,8 +11,9 @@ router.get('/', async function(req, res, next) {
 router.get('/:len', async function(req, res, next) {
   db = res.locals.db;
   len = req.params.len;
+  user = res.locals.user
 
-  if (res.locals.user === 'undefined') {
+  if (user === 'undefined' || !user.email_verified) {
     loggedIn = false;
   } else {
     loggedIn = true;
@@ -24,26 +25,25 @@ router.get('/:len', async function(req, res, next) {
   if (loggedIn) {
     var leaderboard = data_array.slice(0, 5);
     var cur_rank = 1;
-    var email = res.locals.user.email
     var found = false;
 
-    leaderboard = leaderboard.map(user => {
-      if (user.email == email) {
+    leaderboard = leaderboard.map(leaderboard_user => {
+      if (leaderboard_user.email == user.email) {
         found = true;
-        user.cur_user = true;
+        leaderboard_user.cur_user = true;
       }
-      user.rank = cur_rank;
+      leaderboard_user.rank = cur_rank;
       cur_rank ++;
-      return user;
+      return leaderboard_user;
     });
 
     if (!found) {
       var cur_rank = 1;
-      data_array.each(user => {
-        if (user.email == email) {
-          user.rank = cur_rank;
-          user.cur_user = true;
-          leaderboard.push(user);
+      data_array.each(leaderboard_user => {
+        if (leaderboard_user.email == email) {
+          leaderboard_user.rank = cur_rank;
+          leaderboard_user.cur_user = true;
+          leaderboard.push(leaderboard_user);
         }
         cur_rank ++;
       })
@@ -53,17 +53,21 @@ router.get('/:len', async function(req, res, next) {
     var leaderboard = data_array.slice(0, 5);
     var cur_rank = 1;
 
-    leaderboard = leaderboard.map(user => {
-      user.rank = cur_rank;
+    leaderboard = leaderboard.map(leaderboard_user => {
+      leaderboard_user.rank = cur_rank;
       cur_rank ++;
-      return user;
+      return leaderboard_user;
     });
   }
+
+  error = req.cookies["error"];
+  res.clearCookie("error", { httpOnly: true });
 
   res.render('leaderboard', { 
     title: len + " Letter Leaderboard",
     leaderboard: leaderboard,
     len: len,
+    error: error
   });
 });
 
