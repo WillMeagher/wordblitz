@@ -1,7 +1,6 @@
 var dbo = require('./dbStartup');
 dbo.connectToServer(err => {if (err) {console.log(err)}});
 var consts = require('./constants');
-const { query } = require('express');
 
 module.exports = {
     getNewAnswer: async function (len) {
@@ -12,7 +11,7 @@ module.exports = {
 
     validWord: async function (word, len) {
         if (word.length == len) {
-            query = {}
+            var query = {}
             query['words.' + len] = word
 
             const db = dbo.getDb();
@@ -68,7 +67,7 @@ module.exports = {
 
     updateGame: async function (email, game, len) {
         const db = dbo.getDb();
-        query = {$set: {}};
+        var query = {$set: {}};
         query.$set['games.' + len] = game
 
         await db.collection('users').updateOne({email: email}, query);
