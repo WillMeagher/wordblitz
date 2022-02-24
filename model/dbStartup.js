@@ -12,7 +12,7 @@ module.exports = {
             return callback(err);
         }
 
-        dbCon = db.db("wordle");
+        dbCon = db.db("wordblitz");
         console.log("Successfully connected to MongoDB.");
 
         return callback(err);
