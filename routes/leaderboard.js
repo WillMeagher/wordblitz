@@ -13,7 +13,7 @@ router.get('/:len', async function(req, res, next) {
   len = req.params.len;
   user = res.locals.user
 
-  if (user === 'undefined' || !user.email_verified) {
+  if (user === undefined || !user.email_verified) {
     loggedIn = false;
   } else {
     loggedIn = true;
