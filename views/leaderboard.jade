@@ -4,18 +4,38 @@ block head
   link(rel='stylesheet', href='/stylesheets/leaderboard.css')
 
 block content
-  div.d-flex
-    h1.ms-auto.me-auto.mb-3= title
+  div.d-flex.mt-3
+    if (len == 4)
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
+    else if (len == 5)
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
+    else
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
+
+    h2.m-3.mt-2 #{title}
+
+    if (len == 4)
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
+    else if (len == 5)
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
+    else
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
 
   div
     each user in leaderboard
       div.d-flex
         div.rank.ms-auto.me-3 #{user.rank}
         if (user.cur_user !== undefined)
-          div.list-item.m-2.me-auto.cur_user
+          div.list-item.m-2.mt-3.me-auto.cur_user
             div User: #{user.email}
-            div Average Score: #{user.averageScore}
+            div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
         else
           div.list-item.m-2.me-auto
             div User: #{user.email}
-            div Average Score: #{user.averageScore}
+            div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
