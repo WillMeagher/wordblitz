@@ -19,8 +19,8 @@ router.get('/:len', async function(req, res, next) {
     loggedIn = true;
   }
 
-  data = await db.getLeaderboard(len);
-  data_array = await data.toArray()
+  var data = await db.getLeaderboard(len);
+  var data_array = await data.toArray()
 
   if (loggedIn) {
     var leaderboard = data_array.slice(0, 5);
@@ -39,14 +39,15 @@ router.get('/:len', async function(req, res, next) {
 
     if (!found) {
       var cur_rank = 1;
-      data_array.each(leaderboard_user => {
+      for (let i = 0; i < data_array.length; i++) {
+        var leaderboard_user = data_array[i];
         if (leaderboard_user.email == email) {
           leaderboard_user.rank = cur_rank;
           leaderboard_user.cur_user = true;
           leaderboard.push(leaderboard_user);
         }
         cur_rank ++;
-      })
+      }
     }
 
   } else {
