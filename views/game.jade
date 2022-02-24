@@ -5,8 +5,7 @@ block head
     link(rel='stylesheet', href='/stylesheets/game.css')
 
 block content
-  div.text-center.top-60
-    h1= title
+  div.text-center
     - var first = true;
     - var allCorrect = false;
     - var allGuesses = true;
@@ -16,7 +15,8 @@ block content
     - var bottomRow = ["z", "x", "c", "v", "b", "n", "m"];
     - var defaultGuess = new Array(parseInt(len, 10)).fill(" ").join("");
 
-    div.mt-3
+    div 
+        div.spacer
         each word in game.guesses
             div.d-flex.justify-content-center.text-center
 

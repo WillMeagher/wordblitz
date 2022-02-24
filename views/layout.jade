@@ -12,19 +12,26 @@ html
 
   body.pb-0.pt-4
     div.d-flex.justify-content-between
-      div
-        a.me-3(href=process.env.APP_URL, style="color: inherit;")
+      div.d-flex.me-auto(style="width:25%;")
+        a.mt-auto.mb-auto.me-3(href=process.env.APP_URL, style="color: inherit;")
           i.fa.fa-home.fa-lg
-        a(href=process.env.APP_URL + "/game/5", style="color: inherit;")
+        a.mt-auto.mb-auto.me-3(href=process.env.APP_URL + "/game/5", style="color: inherit;")
           i.fa.fa-play.fa-lg  
-      div.ml-auto
-        if (typeof user === 'undefined')
-          button.btn.btn-info.ms-auto(style="height:40px;", onclick="window.location.href='/login'") Login
-        else
-          a(href=process.env.APP_URL + '/profile', style="color: inherit;")
-            div #{user.name}
+        a.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
+          i.fa.fa-list-ol.fa-lg  
 
-    hr
+      div.d-flex.ms-auto.me-auto.justify-content-center(style="width:40%;")
+          a.mt-auto.mb-auto(href=process.env.APP_URL, style="color: inherit; text-decoration: none;")
+            h3.m-0 #{process.env.APP_NAME}
+
+      div.d-flex.ms-auto(style="width:25%;")
+        div.ms-auto.mt-auto.mb-auto
+          if (typeof user === 'undefined')
+            button.btn.btn-info(style="height:40px;", onclick="window.location.href='/login'") Login
+          else
+            a(href=process.env.APP_URL + '/profile', style="color: inherit;") #{user.name}
+
+    hr.mb-0
 
     if (error != undefined)
       div.error.d-flex.m-2.p-2 #{error}
