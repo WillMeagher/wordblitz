@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   res.clearCookie("error", { httpOnly: true });
 
   res.render('index', { 
-    title: 'Wordle',
+    title: process.env.APP_NAME,
     error: error
   });
 });

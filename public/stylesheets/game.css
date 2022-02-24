@@ -82,12 +82,17 @@ ul {
 }
 
 .spacer {
-  height: 105px;
+  height: 120px;
 }
 
-.top-60 {
-  margin-top: 60px;
+.mt-40 {
+  margin-top: 40px;
 }
+
+.mb-40 {
+  margin-bottom: 40px;
+}
+
 
 .answer {
   font-size: 24px;
