@@ -20,6 +20,7 @@ input {
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  background-color: white;
 }
 
 .cur-input:hover {
@@ -55,10 +56,8 @@ ul {
   border: 1px solid black;
   font-size: 26px;
   margin: 4px;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
+  padding: 0px;
+  background-color: white;
 }
 
 .focus {

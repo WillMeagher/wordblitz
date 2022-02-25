@@ -70,22 +70,22 @@ block content
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
                 each char in topRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
                 each char in middleRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
-                div.key(onclick="onClickKey(this)")
+                button.key(onclick="onClickKey(this)")
                     i.fa.fa-level-down-alt.fa-rotate-90
 
                 each char in bottomRow
-                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
-                div.key(onclick="onClickKey(this)")
+                button.key(onclick="onClickKey(this)")
                     i.fa.fa-backspace
 
             div.d-flex.justify-content-center
-                div.key.space(onclick="onClickKey(this)") _
+                button.key.space(onclick="onClickKey(this)") _
         

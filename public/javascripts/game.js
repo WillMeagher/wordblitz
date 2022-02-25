@@ -53,7 +53,7 @@ function onKeyDownGuess(event) {
     var caret_place = input_element.selectionEnd;
 
     if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) { 
-        // character or space or backspace
+        // character or space
         if (caret_place < getStrLen()) {
             removeNextChar();
             addCharacterAt(event.key, caret_place);
@@ -63,6 +63,7 @@ function onKeyDownGuess(event) {
             input_element.focus();
             input_element.setSelectionRange(caret_place, caret_place);
         }
+        event.preventDefault();
     } else if (event.keyCode == 8) { 
         // backspace
         backspace();
@@ -94,11 +95,12 @@ function removeNextChar() {
 }
 
 function backspace() {
-    var elem = document.getElementById(INPUT_ID);
-    var caret_place = elem.selectionEnd;
+    var input_element = document.getElementById(INPUT_ID);
+    var caret_place = input_element.selectionEnd;
     if (caret_place != 0) {
-        elem.value = elem.value.slice(0, elem.selectionEnd - 1) + " " + elem.value.slice(elem.selectionEnd, elem.value.length);
-        elem.setSelectionRange(caret_place - 1, caret_place - 1);
+        input_element.value = input_element.value.slice(0, input_element.selectionEnd - 1) + " " + input_element.value.slice(input_element.selectionEnd, input_element.value.length);
+        input_element.focus();
+        input_element.setSelectionRange(caret_place - 1, caret_place - 1);
     }
 }
 
