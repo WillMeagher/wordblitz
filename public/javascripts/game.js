@@ -5,11 +5,47 @@ const FORM_ID = "answer-form";
 
 document.addEventListener('keydown', function (event) {
     var input_element = document.getElementById(INPUT_ID);
-    if (document.activeElement != input_element && ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32 || event.keyCode == 46 || event.keyCode == 8)) { 
-        var caret_place = input_element.selectionEnd;
-        input_element.focus();
-        input_element.setSelectionRange(caret_place, caret_place);
-        onKeyDownGuess(event);
+    var caret_place = input_element.selectionEnd;
+    var key = event.key;
+
+    if (key.match(/^[A-Za-z ]$/g)) { 
+        // character or space
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(event.key, caret_place);
+            input_element.focus();
+            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
+        } else {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place, caret_place);
+        }
+        event.preventDefault();
+    } else if (key == "Backspace") { 
+        // backspace
+        backspace();
+        event.preventDefault();
+    } else if (key == "Delete") { 
+        // delete
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(" ", caret_place);
+            input_element.focus();
+            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
+        } else {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place, caret_place);
+        }
+        event.preventDefault();
+    } else if (key == "ArrowLeft") {
+        if (caret_place != 0) {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place - 1, caret_place - 1);
+        }
+    } else if (key == "ArrowRight") {
+        if (caret_place < getStrLen()) {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
+        }
     }
 });
 
@@ -46,43 +82,6 @@ function updateBoxContent() {
         }
         var elem = document.getElementById("select" + ++i);
     }
-}
-
-function onKeyDownGuess(event) {
-    var input_element = document.getElementById(INPUT_ID);
-    var caret_place = input_element.selectionEnd;
-
-    if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) { 
-        // character or space
-        if (caret_place < getStrLen()) {
-            removeNextChar();
-            addCharacterAt(event.key, caret_place);
-            input_element.focus();
-            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-        } else {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place, caret_place);
-        }
-        event.preventDefault();
-    } else if (event.keyCode == 8) { 
-        // backspace
-        backspace();
-        event.preventDefault();
-    } else if (event.keyCode == 46) { 
-        // delete
-        if (caret_place < getStrLen()) {
-            removeNextChar();
-            addCharacterAt(" ", caret_place);
-            input_element.focus();
-            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-        } else {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place, caret_place);
-        }
-        event.preventDefault();
-    }
-
-    // TODO add support for arrow keys just move caret_place +-1 if not at end
 }
 
 function removeNextChar() {

@@ -40,7 +40,7 @@ block content
                     - allGuesses = false;
                     form#answer-form.text-center(name="guess", method="post", inputmode='none', action=process.env.APP_URL + "/game/guess/" + len)
                         div(style="height: 0px; width: 0px;")
-                            input#guess(style="opacity: 0; height: 0; width: 0;", readonly, type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeydown="onKeyDownGuess(event)", onkeyup="inputEntered(this, event)")
+                            input#guess(style="opacity: 0; height: 0; width: 0;", readonly, type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off", autofocus="autofocus", onkeyup="inputEntered(this, event)")
                             input(type="submit", style="display: none")
 
                     - for(var i = 0; i < len; i++)
