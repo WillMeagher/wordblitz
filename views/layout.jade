@@ -10,8 +10,8 @@ html
 
     block head
 
-  body.pb-0.pt-4
-    div.d-flex.justify-content-between
+  body.m-0.p-0.bg-light
+    div.pt-3.pb-3.ps-4.pe-4.d-flex.justify-content-between.bg-white
       div.d-flex.me-auto(style="width:25%;")
         a.mt-auto.mb-auto.me-3(href=process.env.APP_URL, style="color: inherit;")
           i.fa.fa-home.fa-lg
@@ -31,9 +31,10 @@ html
           else
             a(href=process.env.APP_URL + '/profile', style="color: inherit;") #{user.name}
 
-    hr.mb-0
+    hr.m-0
 
     if (error != undefined)
       div.error.d-flex.m-2.p-2 #{error}
 
-    block content
+    div.m-3.mb-0
+      block content

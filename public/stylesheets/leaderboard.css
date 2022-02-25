@@ -5,14 +5,11 @@
     border: 1px solid black;
     border-radius: 10px;
     max-width: 850px;
-    width: 90%;
+    width: 50%;
 }
 
 .rank {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .cur_user {

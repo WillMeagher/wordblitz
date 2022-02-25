@@ -30,12 +30,18 @@ block content
   div
     each user in leaderboard
       div.d-flex
-        div.rank.ms-auto.me-3 #{user.rank}
+        
         if (user.cur_user !== undefined)
-          div.list-item.m-2.mt-3.me-auto.cur_user
-            div User: #{user.email}
-            div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
+          div.list-item.m-2.mt-3.ms-auto.me-auto.cur_user
+            div.d-flex
+              div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
+              div
+                div User: #{user.email}
+                div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
         else
-          div.list-item.m-2.me-auto
-            div User: #{user.email}
-            div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
+          div.list-item.m-2.ms-auto.me-auto
+            div.d-flex
+            div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
+              div
+                div User: #{user.email}
+                div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
