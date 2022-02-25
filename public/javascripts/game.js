@@ -49,17 +49,26 @@ function updateBoxContent() {
 }
 
 function onKeyDownGuess(event) {
+    var input_element = document.getElementById(INPUT_ID);
+    var caret_place = input_element.selectionEnd;
+
     if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 32) { 
-        // character or space
-        removeNextChar();
+        // character or space or backspace
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(event.key, caret_place);
+            input_element.focus();
+            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
+        } else {
+            input_element.focus();
+            input_element.setSelectionRange(caret_place, caret_place);
+        }
     } else if (event.keyCode == 8) { 
         // backspace
         backspace();
         event.preventDefault();
     } else if (event.keyCode == 46) { 
         // delete
-        var input_element = document.getElementById(INPUT_ID);
-        var caret_place = input_element.selectionEnd;
         if (caret_place < getStrLen()) {
             removeNextChar();
             addCharacterAt(" ", caret_place);
@@ -71,6 +80,8 @@ function onKeyDownGuess(event) {
         }
         event.preventDefault();
     }
+
+    // TODO add support for arrow keys just move caret_place +-1 if not at end
 }
 
 function removeNextChar() {
