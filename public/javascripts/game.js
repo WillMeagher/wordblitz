@@ -2,72 +2,44 @@ const INPUT_ID = "guess";
 const FOCUS_CLASS = "focus";
 const CUR_INPUT_CLASS = "cur-input";
 const FORM_ID = "answer-form";
+var caret_place = 0;
 
+// on actual keyboard keypress
 document.addEventListener('keydown', function (event) {
-    var input_element = document.getElementById(INPUT_ID);
-    var caret_place = input_element.selectionEnd;
     var key = event.key;
-
-    if (key.match(/^[A-Za-z ]$/g)) { 
-        // character or space
-        if (caret_place < getStrLen()) {
-            removeNextChar();
-            addCharacterAt(event.key, caret_place);
-            input_element.focus();
-            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-        } else {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place, caret_place);
-        }
-        event.preventDefault();
-    } else if (key == "Backspace") { 
-        // backspace
-        backspace();
-        event.preventDefault();
-    } else if (key == "Delete") { 
-        // delete
-        if (caret_place < getStrLen()) {
-            removeNextChar();
-            addCharacterAt(" ", caret_place);
-            input_element.focus();
-            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-        } else {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place, caret_place);
-        }
-        event.preventDefault();
-    } else if (key == "ArrowLeft") {
-        if (caret_place != 0) {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place - 1, caret_place - 1);
-        }
-    } else if (key == "ArrowRight") {
-        if (caret_place < getStrLen()) {
-            input_element.focus();
-            input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-        }
-    }
+    enterInput(key);
 });
+
+// on onscreen keyboard keypress
+function onClickKey (_this) {
+    if (_this.firstChild && _this.firstChild.nodeName == "I") {
+        if (_this.firstChild.classList.contains("fa-level-down-alt")) {
+            document.getElementById(FORM_ID).submit();
+        } else {
+            enterInput("Backspace");
+        }
+    } else if (caret_place < getStrLen()) {
+        var character = ((_this.innerHTML == "_") ? " " : _this.innerHTML);
+        enterInput(character);
+    }
+}
+
+// on word spot click
+function onClickSelect (_this) {
+    caret_place = (_this.id).replace(/\D/g,'');
+    removeHighlight()
+    _this.classList.add(FOCUS_CLASS);
+}
 
 function getStrLen() {
     return document.getElementsByClassName(CUR_INPUT_CLASS).length;
 }
 
-function onClickSelect (_this) {
-    var caret_place = (_this.id).replace(/\D/g,'');
-
-    removeHighlight()
-    _this.classList.add(FOCUS_CLASS);
-
+function removeNextChar() {
     var elem = document.getElementById(INPUT_ID);
-    elem.focus();
-    elem.setSelectionRange(caret_place, caret_place);
-}
-
-function inputEntered(_this) {
-    _this.value = _this.value.replace(/[^a-z ]/g, "")
-    updateBoxContent()
-    updateHighlight()
+    if (caret_place < elem.value.length) {
+        elem.value = elem.value.slice(0, caret_place) + elem.value.slice(caret_place + 1, elem.value.length);
+    }
 }
 
 function updateBoxContent() {
@@ -84,29 +56,9 @@ function updateBoxContent() {
     }
 }
 
-function removeNextChar() {
-    var elem = document.getElementById(INPUT_ID);
-    var caret_place = elem.selectionEnd;
-    if (caret_place < elem.value.length && elem.selectionStart == caret_place) {
-        elem.value = elem.value.slice(0, caret_place) + elem.value.slice(caret_place + 1, elem.value.length);
-        elem.setSelectionRange(caret_place, caret_place);
-    }
-}
-
-function backspace() {
-    var input_element = document.getElementById(INPUT_ID);
-    var caret_place = input_element.selectionEnd;
-    if (caret_place != 0) {
-        input_element.value = input_element.value.slice(0, input_element.selectionEnd - 1) + " " + input_element.value.slice(input_element.selectionEnd, input_element.value.length);
-        input_element.focus();
-        input_element.setSelectionRange(caret_place - 1, caret_place - 1);
-    }
-}
-
 function updateHighlight() {
     removeHighlight()
-    var input = document.getElementById(INPUT_ID);
-    var elem = document.getElementById("select" + input.selectionEnd);
+    var elem = document.getElementById("select" + caret_place.toString());
     if (elem != null) {
         elem.classList.add(FOCUS_CLASS);
     }
@@ -128,27 +80,44 @@ function addCharacterAt(character, place) {
     return new_string;
 }
 
-function onClickKey (_this) {
-    var input_element = document.getElementById(INPUT_ID);
-    var caret_place = input_element.selectionEnd;
+function enterInput(key) {
 
-    if (_this.firstChild && _this.firstChild.nodeName == "I") {
-        if (_this.firstChild.classList.contains("fa-level-down-alt")) {
-            document.getElementById(FORM_ID).submit();
-        } else {
-            backspace();
+    if (key.match(/^[a-z ]$/g)) { 
+        // character or space
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(key, caret_place);
+            caret_place = parseInt(caret_place, 10) + 1;
         }
-    } else if (caret_place < getStrLen()) {
-        var character = ((_this.innerHTML == "_") ? " " : _this.innerHTML);
-        removeNextChar();
-        addCharacterAt(character, caret_place);
-        input_element.focus();
-        input_element.setSelectionRange(caret_place + 1, caret_place + 1);
-    } else {
-        input_element.focus();
-        input_element.setSelectionRange(caret_place, caret_place);
+    } else if (key == "Backspace") { 
+        // backspace
+        if (caret_place > 0) {
+            caret_place = parseInt(caret_place, 10) - 1;
+            removeNextChar();
+            addCharacterAt(" ", caret_place);
+        }
+    } else if (key == "Delete") { 
+        // delete
+        if (caret_place < getStrLen()) {
+            removeNextChar();
+            addCharacterAt(" ", caret_place);
+            caret_place = parseInt(caret_place, 10) + 1;
+        }
+    } else if (key == "ArrowLeft") {
+        if (caret_place > 0) {
+            caret_place = parseInt(caret_place, 10) - 1;
+        }
+    } else if (key == "ArrowRight") {
+        if (caret_place < getStrLen()) {
+            caret_place = parseInt(caret_place, 10) + 1;
+        }
     }
 
     updateBoxContent();
     updateHighlight();
+    console.log(caret_place);
+
+    var input_element = document.getElementById(INPUT_ID);
+    var cur_string = input_element.value;
+    console.log(cur_string);
 }
