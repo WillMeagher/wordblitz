@@ -14,7 +14,7 @@ document.addEventListener('keydown', function (event) {
 function onClickKey (_this) {
     if (_this.firstChild && _this.firstChild.nodeName == "I") {
         if (_this.firstChild.classList.contains("fa-level-down-alt")) {
-            document.getElementById(FORM_ID).submit();
+            enterInput("Enter");
         } else {
             enterInput("Backspace");
         }
@@ -111,13 +111,10 @@ function enterInput(key) {
         if (caret_place < getStrLen()) {
             caret_place = parseInt(caret_place, 10) + 1;
         }
+    } else if (key == "Enter") {
+        document.getElementById(FORM_ID).submit();
     }
 
     updateBoxContent();
     updateHighlight();
-    console.log(caret_place);
-
-    var input_element = document.getElementById(INPUT_ID);
-    var cur_string = input_element.value;
-    console.log(cur_string);
 }
