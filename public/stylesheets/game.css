@@ -43,6 +43,10 @@ ul {
   padding: 0px;
   background-color: white;
   color: black;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
 }
 
 .focus {
@@ -55,7 +59,7 @@ ul {
 }
 
 .space {
-  width: 200px;
+  width: 260px;
 }
 
 .text {

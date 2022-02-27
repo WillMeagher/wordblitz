@@ -3,6 +3,7 @@ extends layout
 block head
     script(src="/javascripts/game.js")
     link(rel='stylesheet', href='/stylesheets/game.css')
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 
 block content
   div.text-center
@@ -70,22 +71,22 @@ block content
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
                 each char in topRow
-                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
                 each char in middleRow
-                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
-                button.key(onclick="onClickKey(this)")
+                div.key(onclick="onClickKey(this)")
                     i.fa.fa-level-down-alt.fa-rotate-90
 
                 each char in bottomRow
-                    button.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
+                    div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
-                button.key(onclick="onClickKey(this)")
+                div.key(onclick="onClickKey(this)")
                     i.fa.fa-backspace
 
             div.d-flex.justify-content-center
-                button.key.space(onclick="onClickKey(this)") _
+                div.key.space(onclick="onClickKey(this)") _
         
