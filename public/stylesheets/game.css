@@ -33,13 +33,17 @@ ul {
   list-style-type: none;
 }
 
+i {
+  font-size: 24px;
+}
+
 .key {
-  width: 40px;
-  height: 50px;
+  width: 36px;
+  height: 47px;
   border-radius: 5px;
   border: 1px solid black;
   font-size: 26px;
-  margin: 4px;
+  margin: 3px;
   padding: 0px;
   background-color: white;
   color: black;
@@ -49,13 +53,22 @@ ul {
   flex-direction: column;
 }
 
-.focus {
-  border: 3px solid black;
+.key-spacer {
+  width: 14px;
+  height: 47px;
+  margin: 3px;
+  padding: 0px;
 }
 
-.key:hover {
-  background-color: rgb(221, 221, 221);
-  cursor: pointer;
+@media (hover: hover) {
+  .key:hover {
+      background-color: rgb(221, 221, 221);
+      cursor: pointer;
+  }
+}
+
+.focus {
+  border: 3px solid black;
 }
 
 .space {

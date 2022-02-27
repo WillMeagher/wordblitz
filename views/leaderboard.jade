@@ -35,13 +35,13 @@ block content
           div.list-item.m-2.mt-3.ms-auto.me-auto.cur_user
             div.d-flex
               div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
-              div
-                div User: #{user.email}
+              div(style="overflow: hidden;")
+                div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
                 div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
         else
           div.list-item.m-2.ms-auto.me-auto
             div.d-flex
-            div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
-              div
-                div User: #{user.email}
+              div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
+              div(style="overflow: hidden;")
+                div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
                 div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}

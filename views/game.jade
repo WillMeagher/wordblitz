@@ -3,7 +3,6 @@ extends layout
 block head
     script(src="/javascripts/game.js")
     link(rel='stylesheet', href='/stylesheets/game.css')
-    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 
 block content
   div.text-center
@@ -74,10 +73,16 @@ block content
                     div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
             div.d-flex.justify-content-center
+                div.key-spacer
+
                 each char in middleRow
                     div.key(class="#{charColors[char]}", onclick="onClickKey(this)") #{char}
 
+                div.key-spacer
+
             div.d-flex.justify-content-center
+                div.key-spacer
+
                 div.key(onclick="onClickKey(this)")
                     i.fa.fa-level-down-alt.fa-rotate-90
 
@@ -86,6 +91,8 @@ block content
 
                 div.key(onclick="onClickKey(this)")
                     i.fa.fa-backspace
+    
+                div.key-spacer
 
             div.d-flex.justify-content-center
                 div.key.space(onclick="onClickKey(this)") _
