@@ -161,14 +161,11 @@ module.exports = {
                     });
 
                     // set yellows and reds
-                    return word.map(function(char, index) {
+                    return word.map(function(char) {
                         if (char.constructor == Object) {
                             return char;
                         } else if (answer.includes(char)) {
-                            answer = answer.split("");
-                            answer[index] = " ";
-                            answer = answer.join("");
-
+                            answer = answer.replace(new RegExp(char), " ");
                             return {
                                 accuracy: "close",
                                 char: char
