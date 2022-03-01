@@ -2,27 +2,57 @@ extends layout
 
 block content
   div.d-flex
-    h1= title
-    button.btn.btn-info.ms-auto(style="height:40px;", onclick="window.location.href='/logout'") Logout
+  div.d-flex.mt-3.mb-4
+    if (len == 4)
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
+    else if (len == 5)
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
+    else
+      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/5", style="color: inherit;")
+        i.fa.fa-arrow-left.fa-15x
 
-  div
-    each vals, length in userScores
-      a(href=process.env.APP_URL + '/game/' + length, style="color: inherit; text-decoration: none;")
-        h3.mt-3.ms-3 #{length} Letters
+    h2.m-3.mt-2 #{title}
 
-      div.m-3.d-flex(style="min-height: 250px;")
-        div.detail.mt-auto
-          p.m-2.text-center Guesses:
+    if (len == 4)
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/5", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
+    else if (len == 5)
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
+    else
+      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
+        i.fa.fa-arrow-right.fa-15x
 
-        each val, key in vals
-          if (key != "gamesPlayed" && key != "totalScore")
-            div.detail.mt-auto(style="min-width: 60px")
-              div
-                p.m-1.text-center #{val}
-              div.bar.bg-secondary.ms-auto.me-auto(style="height: #{Math.max(Math.round((val / vals.totalScore) * 1400), 5)}px; width: 80%;")
-              div
-                p.m-2.text-center #{key}
+    button.btn.btn-info.ms-auto(style="height:40px; position:absolute; right: 30px", onclick="window.location.href='/logout'") Logout
 
-        div.detail.mt-auto.mb-auto
-          p.m-2 Games Played : #{vals.gamesPlayed}
-          p.m-2 Average Score : #{(vals.gamesPlayed != 0) ? Math.round(((vals.totalScore / vals.gamesPlayed) + Number.EPSILON) * 100) / 100 : "NA"}
+  div.d-flex(style="flex-wrap: wrap;")
+    div.ms-auto.me-auto.m-2.p-2(style="border: 1px solid black; border-radius: 15px; background-color: white;")
+      a(href=process.env.APP_URL + '/game/' + len, style="color: inherit; text-decoration: none;")
+
+      div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")
+        div
+          div(style="font-size: 20px;") Guesses:
+
+          div.ms-2(style="width: 295px;")
+
+            - max = 0;
+            each val, key in userScores
+              - if (key != "gamesPlayed" && key != "totalScore" && userScores.gamesPlayed != 0 && val > max) max = val
+
+            each val, key in userScores
+              if (key != "gamesPlayed" && key != "totalScore")
+
+                div.m-2.d-flex
+
+                  div.d-flex.me-2(style="width: 50px; justify-content: center; align-content: center; flex-direction: column;")
+                    div.ms-auto(style="display: inline-block; font-size: 20px;") #{key}:
+
+                  div.bg-secondary(style="width: #{(userScores.gamesPlayed != 0) ? Math.max(Math.round((val / max) * 200), 5) : 5}px; height: 50px")
+
+                  div.m-1.d-flex(style="justify-content: center; align-content: center; flex-direction: column; font-size: 20px;") #{val}
+
+        div.ms-auto.me-auto.d-flex(style="justify-content: center; align-content: center; flex-direction: column;")
+          div.me-4.mt-2(style="font-size: 20px;") Average Score : #{(userScores.gamesPlayed != 0) ? Math.round(((userScores.totalScore / userScores.gamesPlayed) + Number.EPSILON) * 100) / 100 : "NA"}
+          div.me-4.mt-2(style="font-size: 20px;") Games Played : #{userScores.gamesPlayed}
