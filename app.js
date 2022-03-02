@@ -37,8 +37,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-app.use('/css', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/css'));
+
+app.use('/javascripts', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/javascripts', express.static(__dirname + '/node_modules/@popperjs/core/dist/umd'));
+app.use('/javascripts', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+
+app.use('/stylesheets', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/stylesheets', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/css'));
 app.use('/webfonts', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/webfonts'));
 
 app.use(async function (req, res, next) {
