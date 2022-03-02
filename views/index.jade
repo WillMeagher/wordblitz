@@ -1,16 +1,31 @@
 extends layout
 
 block content
-  p Welcome to #{title}
-  div
-    a(href=process.env.APP_URL + '/game/4') Play 4 Letter
-  div
-    a(href=process.env.APP_URL + '/game/5') Play 5 Letter
-  div
-    a(href=process.env.APP_URL + '/game/6') Play 6 Letter
+  div.justify-content-center
+    div.container
+      div.card
+        div.card-header.text-center
+          h2.m-2 Home
+        div.card-body(style="font-size:24px; color:black;")
+          div.ms-4.mb-4
+            h3 Play
+            div.ms-3
+              a(href=process.env.APP_URL + '/game/4' style="color:black;") 4 Letter
+            div.ms-3
+              a(href=process.env.APP_URL + '/game/5' style="color:black;") 5 Letter
+            div.ms-3
+              a(href=process.env.APP_URL + '/game/6' style="color:black;") 6 Letter
 
-  div.mt-3
-    a(href=process.env.APP_URL + '/profile') Profile
+          div.ms-4.mb-4
+            h3 Profile
+            div.ms-3
+              a(href=process.env.APP_URL + '/profile' style="color:black;") View
 
-  div.mt-3
-    a(href=process.env.APP_URL + '/leaderboard') Leaderboard
+          div.ms-4.mb-4
+            h3 Leaderboard
+            div.ms-3
+              a(href=process.env.APP_URL + '/leaderboard/4' style="color:black;") 4 Letter
+            div.ms-3
+              a(href=process.env.APP_URL + '/leaderboard/5' style="color:black;") 5 Letter
+            div.ms-3
+              a(href=process.env.APP_URL + '/leaderboard/6' style="color:black;") 6 Letter

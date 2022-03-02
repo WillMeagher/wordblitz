@@ -4,44 +4,45 @@ block head
   link(rel='stylesheet', href='/stylesheets/leaderboard.css')
 
 block content
-  div.d-flex.mt-3
-    if (len == 4)
-      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
-        i.fa.fa-arrow-left.fa-15x
-    else if (len == 5)
-      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
-        i.fa.fa-arrow-left.fa-15x
-    else
-      a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
-        i.fa.fa-arrow-left.fa-15x
-
-    h2.m-3.mt-2 #{title}
-
-    if (len == 4)
-      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
-        i.fa.fa-arrow-right.fa-15x
-    else if (len == 5)
-      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
-        i.fa.fa-arrow-right.fa-15x
-    else
-      a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
-        i.fa.fa-arrow-right.fa-15x
-
-  div
-    each user in leaderboard
-      div.d-flex
-        
-        if (user.cur_user !== undefined)
-          div.list-item.m-2.mt-3.ms-auto.me-auto.cur_user
-            div.d-flex
-              div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
-              div(style="overflow: hidden;")
-                div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
-                div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
+  div.container
+    div.card
+      div.card-header.d-flex.text-center
+        if (len == 4)
+          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
+            i.fa.fa-arrow-left.fa-15x
+        else if (len == 5)
+          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+            i.fa.fa-arrow-left.fa-15x
         else
-          div.list-item.m-2.ms-auto.me-auto
-            div.d-flex
-              div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
-              div(style="overflow: hidden;")
-                div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
-                div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
+          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
+            i.fa.fa-arrow-left.fa-15x
+
+        h2.m-3.mt-2 #{title}
+
+        if (len == 4)
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-15x
+        else if (len == 5)
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-15x
+        else
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-15x
+
+      div.card-body(style="font-size:24px; color:black; flex-wrap: wrap;")
+        each user in leaderboard
+          div.d-flex
+            if (user.cur_user !== undefined)
+              div.list-item.m-2.mt-3.ms-auto.me-auto.cur_user(style="width:100%;")
+                div.d-flex
+                  div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
+                  div(style="overflow: hidden;")
+                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
+                    div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
+            else
+              div.list-item.m-2.ms-auto.me-auto(style="width:100%;")
+                div.d-flex
+                  div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
+                  div(style="overflow: hidden;")
+                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
+                    div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
