@@ -4,6 +4,7 @@ const CUR_INPUT_CLASS = "cur-input";
 const FORM_ID = "answer-form";
 var caret_place = 0;
 const SPACER_CLASS = "spacer";
+var submitted = false;
 
 // on actual keyboard keypress
 document.addEventListener('keydown', function (event) {
@@ -129,7 +130,10 @@ function enterInput(key) {
             caret_place = parseInt(caret_place, 10) + 1;
         }
     } else if (key == "Enter") {
-        document.getElementById(FORM_ID).submit();
+        if (!submitted) {
+            document.getElementById(FORM_ID).submit();
+            submitted = true;
+        }
     }
 
     updateBoxContent();
