@@ -3,12 +3,29 @@ const FOCUS_CLASS = "focus";
 const CUR_INPUT_CLASS = "cur-input";
 const FORM_ID = "answer-form";
 var caret_place = 0;
+const SPACER_CLASS = "spacer";
 
 // on actual keyboard keypress
 document.addEventListener('keydown', function (event) {
     var key = event.key;
     enterInput(key);
 });
+
+window.addEventListener('load', function (event) {
+    updateSpacerSize();
+});
+
+window.addEventListener('resize', function (event) {
+    updateSpacerSize();
+});
+
+function updateSpacerSize() {
+    spacers = document.getElementsByClassName(SPACER_CLASS);
+    width = Math.max(.5 * window.innerHeight - 350, 5);
+    for (i = 0; i < spacers.length; i++) {
+        spacers[i].style.height = width.toString() + "px";
+    }
+}
 
 // on onscreen keyboard keypress
 function onClickKey (_this) {
