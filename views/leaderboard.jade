@@ -4,7 +4,7 @@ block head
   link(rel='stylesheet', href='/stylesheets/leaderboard.css')
 
 block content
-  div.container
+  div.container.mt-3
     div.card
       div.card-header.d-flex.text-center
         if (len == 4)
@@ -29,7 +29,7 @@ block content
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
 
-      div.card-body(style="font-size:24px; color:black; flex-wrap: wrap;")
+      div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
         each user in leaderboard
           div.d-flex
             if (user.cur_user !== undefined)
@@ -37,12 +37,12 @@ block content
                 div.d-flex
                   div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
                   div(style="overflow: hidden;")
-                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
+                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.name}
                     div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
             else
               div.list-item.m-2.ms-auto.me-auto(style="width:100%;")
                 div.d-flex
                   div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
                   div(style="overflow: hidden;")
-                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.email}
+                    div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.name}
                     div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}

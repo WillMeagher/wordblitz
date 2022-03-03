@@ -26,10 +26,11 @@ module.exports = {
         await db.collection('users').updateOne({email: email}, {$set: user});
     },
 
-    createUser: async function (email) {
+    createUser: async function (email, name) {
         const db = dbo.getDb();
         user = {
             email: email,
+            name: name,
             created: new Date(),
             scores: consts.DEFAULT_SCORES,
             games: consts.DEFAULT_GAME,
@@ -53,10 +54,6 @@ module.exports = {
             guesses: new Array(6).fill(null),
             word: await this.getNewAnswer(len)
         };
-
-        if (!await this.userExists(email)) {
-            await this.createUser(email);
-        }
 
         await this.updateGame(email, newGame, len);
     },
@@ -189,7 +186,7 @@ module.exports = {
         const db = dbo.getDb();
         var query = [
             {$match: {}},
-            {$project:{email: "$email", totalScore: ("$scores." + len + ".totalScore"), gamesPlayed: ("$scores." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + len + ".totalScore"), ("$scores." + len + ".gamesPlayed")]}}}, 
+            {$project:{email: "$email", name: "$name", totalScore: ("$scores." + len + ".totalScore"), gamesPlayed: ("$scores." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + len + ".totalScore"), ("$scores." + len + ".gamesPlayed")]}}}, 
             {$sort:{averageScore: 1}}
         ];
         query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: 1};

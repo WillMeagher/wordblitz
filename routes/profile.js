@@ -11,9 +11,10 @@ router.use(requiresAuth(), async function (req, res, next) {
 
   db = res.locals.db;
   email = res.locals.user.email;
+  first_name = res.locals.user.given_name;
 
   if (!(await db.userExists(email))) {
-    await db.createUser(email);
+    await db.createUser(email, first_name);
   }
 
   next();

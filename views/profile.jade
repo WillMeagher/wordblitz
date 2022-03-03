@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  div.container
+  div.container.mt-3(style="max-width:800px;")
     div.card
       div.card-header.d-flex.text-center
         if (len == 4)
@@ -26,7 +26,7 @@ block content
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
 
-      div.card-body(style="font-size:24px; color:black; flex-wrap: wrap;")
+      div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
         a(href=process.env.APP_URL + '/game/' + len, style="color: inherit; text-decoration: none;")
 
         div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")

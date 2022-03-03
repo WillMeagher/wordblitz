@@ -15,7 +15,7 @@ html
     block head
 
   body.m-0.p-0.bg-light
-    div.pt-3.pb-3.ps-4.pe-4
+    div.pt-3.pb-3.ps-4.pe-4.bg-white
       div.d-flex.justify-content-between.ms-auto.me-auto(style="max-width:1200px;")
         div.d-flex.me-auto(style="width:25%;")
           a.mt-auto.mb-auto.me-3(href=process.env.APP_URL, style="color: inherit;")
@@ -36,7 +36,7 @@ html
               button.btn.btn-info(style="height:40px;", onclick="window.location.href='/login'") Login
             else
               // a.dropdown-toggle.text-decoration-none(href=process.env.APP_URL + '/profile', style="color: inherit; text-overflow: ellipsis; white-space: nowrap;") #{user.name}
-              a#navbarDropdown.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: inherit; text-overflow: ellipsis; white-space: nowrap;") #{user.name}
+              a#navbarDropdown.nav-link.dropdown-toggle(href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: inherit; text-overflow: ellipsis; white-space: nowrap;") #{user.given_name}
 
               div.dropdown-menu.dropdown-menu-right(aria-labelledby="navbarDropdown")
                 <a class="dropdown-item" href="/game">Play</a>
@@ -49,5 +49,5 @@ html
     if (error != undefined)
       div.error.d-flex.m-2.p-2 #{error}
 
-    div.m-3.mb-0
+    div.ms-3.me-3
       block content
