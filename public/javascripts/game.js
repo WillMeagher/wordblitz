@@ -43,7 +43,7 @@ function onClickKey (_this) {
 
 // on word spot click
 function onClickSelect (_this) {
-    caret_place = (_this.id).replace(/\D/g,'');
+    caret_place = parseInt((_this.id).replace(/\D/g,''), 10);
     removeHighlight()
     _this.classList.add(FOCUS_CLASS);
 }
