@@ -41,10 +41,11 @@ router.get('/:len', async function(req, res, next) {
       var cur_rank = 1;
       for (let i = 0; i < data_array.length; i++) {
         var leaderboard_user = data_array[i];
-        if (leaderboard_user.email == email) {
+        if (leaderboard_user.email == user.email) {
           leaderboard_user.rank = cur_rank;
           leaderboard_user.cur_user = true;
           leaderboard.push(leaderboard_user);
+          break;
         }
         cur_rank ++;
       }
