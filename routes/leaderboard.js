@@ -13,6 +13,10 @@ router.get('/:len', async function(req, res, next) {
   len = req.params.len;
   user = res.locals.user
 
+  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+    return res.redirect(consts.DEFAULT_WORD_LEN);
+  }
+
   if (user === undefined || !user.email_verified) {
     loggedIn = false;
   } else {

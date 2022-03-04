@@ -30,6 +30,10 @@ router.get('/:len', async function (req, res, next) {
   len = req.params.len;
   email = res.locals.user.email;
 
+  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+    return res.redirect(consts.DEFAULT_WORD_LEN);
+  }
+
   let error = req.cookies["error"];
   res.clearCookie("error", { httpOnly: true });
 
