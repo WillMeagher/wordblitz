@@ -60,14 +60,11 @@ router.post('/guess/:len', async function(req, res, next) {
   guess = req.body.guess;
   email = res.locals.user.email;
 
-  if (!await db.validWord(guess, len)) {
-    console.log("Invalid Guess"); 
-    res.status(204).send();
-  } else {
+  if (await db.validWord(guess, len)) {
     // makeGuess only runs if word is valid inGame and !gameOver
     await db.makeGuess(email, req.body.guess, len);
-    res.redirect('/game/' + len);
   }
+  res.redirect('/game/' + len);
 });
 
 module.exports = router;
