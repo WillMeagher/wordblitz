@@ -32,8 +32,8 @@ module.exports = {
             email: email,
             name: name,
             created: new Date(),
-            scores: consts.DEFAULT_SCORES,
-            games: consts.DEFAULT_GAME,
+            scores: {},
+            games: {},
         };
         console.log("creating user");
         await db.collection('users').insertOne(user);
@@ -111,6 +111,9 @@ module.exports = {
                 }
 
                 if (thisGuess == user.games[len].word) {
+                    if (user.scores[len] == undefined) {
+                        user.scores[len] = consts.DEFAULT_GAME_SCORES;
+                    }
                     user.scores[len][guesses] += 1;
                     user.scores[len].gamesPlayed += 1;
                     user.scores[len].totalScore += guesses;
@@ -121,6 +124,9 @@ module.exports = {
                 }
             }
             guesses ++;
+        }
+        if (user.scores[len] == undefined) {
+            user.scores[len] = consts.DEFAULT_GAME_SCORES;
         }
         user.scores[len].failed += 1;
         user.scores[len].gamesPlayed += 1;
@@ -192,5 +198,16 @@ module.exports = {
         query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: 1};
 
         return await db.collection('users').aggregate(query);
-    }
+    },
+
+    /*
+    migrateData: async function () {
+        const db = dbo.getDb();
+        var data = require('./data');
+        var query = {$set: {}};
+        console.log(data.words);
+        query.$set['words.3'] = data.words;
+        await db.collection('words').updateOne({type: "all"}, query);
+    },
+    */
 }

@@ -4,11 +4,14 @@ block head
   link(rel='stylesheet', href='/stylesheets/leaderboard.css')
 
 block content
-  div.container.mt-3
+  div.container.mt-3(style="max-width:800px;")
     div.card
       div.card-header.d-flex.text-center
-        if (len == 4)
+        if (len == 3)
           a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
+            i.fa.fa-arrow-left.fa-15x
+        else if (len == 4)
+          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/3", style="color: inherit;")
             i.fa.fa-arrow-left.fa-15x
         else if (len == 5)
           a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
@@ -19,28 +22,31 @@ block content
 
         h2.m-3.mt-2 #{title}
 
-        if (len == 4)
+        if (len == 3)
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-15x
+        else if (len == 4)
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
         else if (len == 5)
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
         else
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/3", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
 
       div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
         each user in leaderboard
           div.d-flex
             if (user.cur_user !== undefined)
-              div.list-item.m-2.ms-auto.me-auto.cur_user(style="width:100%;")
+              div.list-item.m-2.ms-auto.me-auto.cur_user(style="width:100%; max-width:600px;")
                 div.d-flex
                   div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
                   div(style="overflow: hidden;")
                     div(style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;") User: #{user.name}
                     div Average Score:  #{Math.round(((user.averageScore) + Number.EPSILON) * 100) / 100}
             else
-              div.list-item.m-2.ms-auto.me-auto(style="width:100%;")
+              div.list-item.m-2.ms-auto.me-auto(style="width:100%; max-width:600px;")
                 div.d-flex
                   div.me-4.ms-1.mt-auto.mb-auto.rank #{user.rank}
                   div(style="overflow: hidden;")

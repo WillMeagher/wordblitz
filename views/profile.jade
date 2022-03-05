@@ -4,8 +4,11 @@ block content
   div.container.mt-3(style="max-width:800px;")
     div.card
       div.card-header.d-flex.text-center
-        if (len == 4)
+        if (len == 3)
           a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
+            i.fa.fa-arrow-left.fa-15x
+        else if (len == 4)
+          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/3", style="color: inherit;")
             i.fa.fa-arrow-left.fa-15x
         else if (len == 5)
           a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
@@ -16,41 +19,47 @@ block content
 
         h2.m-3.mt-2 #{title}
 
-        if (len == 4)
+        if (len == 3)
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-15x
+        else if (len == 4)
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/5", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
         else if (len == 5)
           a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
         else
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
+          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/3", style="color: inherit;")
             i.fa.fa-arrow-right.fa-15x
 
       div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
         a(href=process.env.APP_URL + '/game/' + len, style="color: inherit; text-decoration: none;")
+        
+        if (userScores != undefined && userScores.gamesPlayed > 0)
+          div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")
+            div
+              div Guesses:
 
-        div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")
-          div
-            div Guesses:
+              div.ms-2(style="width: 295px;")
 
-            div.ms-2(style="width: 295px;")
+                - max = 0;
+                each val, key in userScores
+                  - if (key != "gamesPlayed" && key != "totalScore" && userScores.gamesPlayed != 0 && val > max) max = val
 
-              - max = 0;
-              each val, key in userScores
-                - if (key != "gamesPlayed" && key != "totalScore" && userScores.gamesPlayed != 0 && val > max) max = val
+                each val, key in userScores
+                  if (key != "gamesPlayed" && key != "totalScore")
 
-              each val, key in userScores
-                if (key != "gamesPlayed" && key != "totalScore")
+                    div.m-2.d-flex
 
-                  div.m-2.d-flex
+                      div.d-flex.me-2(style="width: 50px; justify-content: center; align-content: center; flex-direction: column;")
+                        div.ms-auto(style="display: inline-block; font-size: 20px;") #{key}:
 
-                    div.d-flex.me-2(style="width: 50px; justify-content: center; align-content: center; flex-direction: column;")
-                      div.ms-auto(style="display: inline-block; font-size: 20px;") #{key}:
+                      div.bg-secondary(style="width: #{(userScores.gamesPlayed != 0) ? Math.max(Math.round((val / max) * 200), 5) : 5}px; height: 50px")
 
-                    div.bg-secondary(style="width: #{(userScores.gamesPlayed != 0) ? Math.max(Math.round((val / max) * 200), 5) : 5}px; height: 50px")
+                      div.m-1.d-flex(style="justify-content: center; align-content: center; flex-direction: column; font-size: 20px;") #{val}
 
-                    div.m-1.d-flex(style="justify-content: center; align-content: center; flex-direction: column; font-size: 20px;") #{val}
-
-          div.ms-auto.me-auto.d-flex(style="justify-content: center; align-content: center; flex-direction: column;")
-            div.me-4.mt-2 Average Score : #{(userScores.gamesPlayed != 0) ? Math.round(((userScores.totalScore / userScores.gamesPlayed) + Number.EPSILON) * 100) / 100 : "NA"}
-            div.me-4.mt-2 Games Played : #{userScores.gamesPlayed}
+            div.ms-auto.me-auto.d-flex(style="justify-content: center; align-content: center; flex-direction: column;")
+              div.me-4.mt-2 Average Score : #{(userScores.gamesPlayed != 0) ? Math.round(((userScores.totalScore / userScores.gamesPlayed) + Number.EPSILON) * 100) / 100 : "NA"}
+              div.me-4.mt-2 Games Played : #{userScores.gamesPlayed}
+        else
+          div.m-2 No Games Played
