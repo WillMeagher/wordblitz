@@ -29,7 +29,7 @@ router.get('/', async function(req, res, next) {
 /* GET home page. */
 router.get('/:len', async function(req, res, next) {
   db = res.locals.db;
-  len = req.params.len
+  len = parseInt(req.params.len, 10);
   email = res.locals.user.email;
 
   if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
@@ -60,7 +60,7 @@ router.get('/:len', async function(req, res, next) {
 
 router.post('/guess/:len', async function(req, res, next) {
   db = res.locals.db;
-  len = req.params.len;
+  len = parseInt(req.params.len, 10);
   guess = req.body.guess;
   email = res.locals.user.email;
 
