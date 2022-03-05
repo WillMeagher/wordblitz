@@ -1,5 +1,5 @@
 module.exports = {
-    MIN_WORD_LEN: 4,
+    MIN_WORD_LEN: 3,
     MAX_WORD_LEN: 6,
     DEFAULT_WORD_LEN: 5,
     DEFAULT_SCORES: {
