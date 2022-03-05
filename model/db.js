@@ -195,7 +195,7 @@ module.exports = {
             {$project:{email: "$email", name: "$name", totalScore: ("$scores." + len + ".totalScore"), gamesPlayed: ("$scores." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + len + ".totalScore"), ("$scores." + len + ".gamesPlayed")]}}}, 
             {$sort:{averageScore: 1}}
         ];
-        query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: 1};
+        query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED};
 
         return await db.collection('users').aggregate(query);
     },

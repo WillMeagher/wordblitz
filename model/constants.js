@@ -13,4 +13,5 @@ module.exports = {
         gamesPlayed: 0,
         totalScore: 0,
     },
+    LEADERBOARD_REQUIRED_GAMES_PLAYED: 5,
 }

@@ -73,6 +73,7 @@ router.get('/:len', async function(req, res, next) {
     title: len + " Letter Leaderboard",
     leaderboard: leaderboard,
     len: len,
+    minPlayed: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED,
     error: error
   });
 });
