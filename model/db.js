@@ -28,14 +28,13 @@ module.exports = {
 
     createUser: async function (email, name) {
         const db = dbo.getDb();
-        user = {
+        var user = {
             email: email,
             name: name,
             created: new Date(),
             scores: {},
             games: {},
         };
-        console.log("creating user");
         await db.collection('users').insertOne(user);
         return user;
     },
@@ -50,7 +49,7 @@ module.exports = {
     },
 
     startGame: async function (email, len) {
-        newGame = {
+        var newGame = {
             guesses: new Array(6).fill(null),
             word: await this.getNewAnswer(len)
         };
@@ -74,13 +73,13 @@ module.exports = {
         if (!await this.inGame(email, len)) {
             return false;
         }
-        user = await this.getUser(email);
-        guesses = 1;
+        var user = await this.getUser(email);
+        var guesses = 1;
         for (const guess of user.games[len].guesses) {
             if (guess == null) {
                 return false;
             } else {
-                thisGuess = "";
+                var thisGuess = "";
 
                 for (const [key, letter] of Object.entries(guess)) {
                     thisGuess += letter.char;
@@ -99,13 +98,13 @@ module.exports = {
         if (!await this.inGame(email, len)) {
             return;
         }
-        user = await this.getUser(email);
-        guesses = 1;
+        var user = await this.getUser(email);
+        var guesses = 1;
         for (const guess of user.games[len].guesses) {
             if (guess == null) {
                 return;
             } else {
-                thisGuess = "";
+                var thisGuess = "";
                 for (const [key, letter] of Object.entries(guess)) {
                     thisGuess += letter.char;
                 }
@@ -119,7 +118,6 @@ module.exports = {
                     user.scores[len].totalScore += guesses;
                     user.games[len] = null;
                     await this.setUser(email, user);
-                    console.log("game over");
                     return;
                 }
             }
@@ -133,17 +131,16 @@ module.exports = {
         user.scores[len].totalScore += 8;
         user.games[len] = null;
         await this.setUser(email, user);
-        console.log("game over");
     },
 
     makeGuess: async function (email, word, len) {
         if (await this.validWord(word, len) && await this.inGame(email, len) && !await this.gameOver(email, len)) {
-            set = false;
-            user = await this.getUser(email);
+            var set = false;
+            var user = await this.getUser(email);
             user.games[len].guesses = user.games[len].guesses.map(guess => {
                 if (!set && guess == null) {
+                    var answer = user.games[len].word;
                     set = true;
-                    answer = user.games[len].word;
                     word = word.split("")
 
                     // set greens

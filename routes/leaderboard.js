@@ -9,17 +9,16 @@ router.get('/', async function(req, res, next) {
 
 /* GET home page. */
 router.get('/:len', async function(req, res, next) {
-  db = res.locals.db;
-  len = parseInt(req.params.len, 10);
-  user = res.locals.user
+  var db = res.locals.db;
+  var len = parseInt(req.params.len, 10);
+  var user = res.locals.user
 
   if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
     return res.redirect(consts.DEFAULT_WORD_LEN);
   }
 
-  if (user === undefined || !user.email_verified) {
-    loggedIn = false;
-  } else {
+  var loggedIn = false;
+  if (user !== undefined && user.email_verified) {
     loggedIn = true;
   }
 
@@ -66,7 +65,7 @@ router.get('/:len', async function(req, res, next) {
     });
   }
 
-  error = req.cookies["error"];
+  var error = req.cookies["error"];
   res.clearCookie("error", { httpOnly: true });
 
   res.render('leaderboard', { 
