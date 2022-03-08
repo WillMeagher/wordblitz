@@ -1,6 +1,12 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  div.container.mt-3(style="max-width:800px;")
+    div.card
+      div.card-header.d-flex
+        h1.ms-auto.me-auto Error
+
+      div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
+        h2.ms-4.mt-2 #{message}
+        h3.ms-4.mt-2 #{error.status}
+        pre.ms-4.mt-2 #{error.stack}

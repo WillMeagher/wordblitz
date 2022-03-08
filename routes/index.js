@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
   res.render('index', { 
     title: process.env.APP_NAME,
-    error: error
+    error_message: error
   });
 });
 

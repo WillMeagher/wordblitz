@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { requiresAuth } = require('express-openid-connect');
 var consts = require('../model/constants');
+const { check, validationResult } = require('express-validator');
 
 // Middleware to make sure player is playing
 router.use(requiresAuth(), async function (req, res, next) {
@@ -32,7 +33,7 @@ router.get('/:len', async function(req, res, next) {
   var len = parseInt(req.params.len, 10);
   var email = res.locals.user.email;
 
-  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
     return res.redirect(consts.DEFAULT_WORD_LEN);
   }
 
@@ -54,17 +55,20 @@ router.get('/:len', async function(req, res, next) {
     title: process.env.APP_NAME, 
     game: game, 
     len: len,
-    error: error
+    error_message: error
   });
 });
 
 router.post('/guess/:len', async function(req, res, next) {
+  check('guess').isLength({min: consts.MIN_WORD_LEN, max: consts.MAX_WORD_LEN}),
+  check('guess').matches(/^[A-Za-z ]+$/)
+  
   var db = res.locals.db;
   var len = parseInt(req.params.len, 10);
   var guess = req.body.guess;
   var email = res.locals.user.email;
 
-  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
     return res.redirect(consts.DEFAULT_WORD_LEN);
   }
 

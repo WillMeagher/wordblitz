@@ -13,7 +13,7 @@ router.get('/:len', async function(req, res, next) {
   var len = parseInt(req.params.len, 10);
   var user = res.locals.user
 
-  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
     return res.redirect(consts.DEFAULT_WORD_LEN);
   }
 
@@ -73,7 +73,7 @@ router.get('/:len', async function(req, res, next) {
     leaderboard: leaderboard,
     len: len,
     minPlayed: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED,
-    error: error
+    error_message: error
   });
 });
 

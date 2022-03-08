@@ -30,7 +30,7 @@ router.get('/:len', async function (req, res, next) {
   var len = parseInt(req.params.len, 10);
   var email = res.locals.user.email;
 
-  if (len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
     return res.redirect(consts.DEFAULT_WORD_LEN);
   }
 
@@ -41,7 +41,7 @@ router.get('/:len', async function (req, res, next) {
     title: "Profile " + len + " Letters" ,
     len: len,
     userScores: (await db.getUser(email)).scores[len],
-    error: error
+    error_message: error
   });
 });
 
