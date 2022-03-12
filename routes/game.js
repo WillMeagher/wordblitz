@@ -43,19 +43,6 @@ router.get('/', async function(req, res, next) {
   });
 });
 
-/* GET home page. */
-router.get('/update', async function(req, res, next) {
-  await db.updateData();
-
-  var error = req.cookies["error"];
-  res.clearCookie("error", { httpOnly: true });
-
-  res.render('index', { 
-    title: process.env.APP_NAME,
-    error_message: error
-  });
-});
-
 router.get('/:type/:len', async function(req, res, next) {
   var db = res.locals.db;
   var type = req.params.type;
@@ -113,5 +100,19 @@ router.post('/guess/:type/:len', async function(req, res, next) {
   }
   res.redirect("/game/" + type + "/" + len);
 });
+
+/*
+router.get('/update', async function(req, res, next) {
+  await db.updateData();
+
+  var error = req.cookies["error"];
+  res.clearCookie("error", { httpOnly: true });
+
+  res.render('index', { 
+    title: process.env.APP_NAME,
+    error_message: error
+  });
+});
+*/
 
 module.exports = router;

@@ -218,6 +218,7 @@ module.exports = {
         return await db.collection('users').aggregate(query);
     },
 
+    /*
     updateData: async function () {
         const db = dbo.getDb();
         users = await db.collection('users').find().toArray();
@@ -238,6 +239,7 @@ module.exports = {
             await this.setUser(user.email, user);
         }
     }
+    */
 
     /*
     migrateData: async function () {
