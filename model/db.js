@@ -5,7 +5,7 @@ var consts = require('./constants');
 module.exports = {
     getNewAnswer: async function (len) {
         const db = dbo.getDb();
-        words = (await db.collection('words').findOne({type: "answers"})).words[len];
+        var words = (await db.collection('words').findOne({type: "answers"})).words[len];
         return words[Math.floor(Math.random()*words.length)];
     },
 
@@ -80,7 +80,6 @@ module.exports = {
             return true;
         }
 
-        var guesses = 1;
         for (const guess of user.games[type][len].guesses) {
             if (guess == null) {
                 return false;
@@ -95,7 +94,6 @@ module.exports = {
                     return true;
                 }
             }
-            guesses ++;
         }
         return true;
     },
@@ -112,7 +110,7 @@ module.exports = {
 
         if (this.timeLeft(user.games[type][len]) < 0) {
             user.scores[type] = user.scores[type] ?? {};
-            user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+            user.scores[type][len] = user.scores[type][len] ?? JSON.parse(JSON.stringify(consts.DEFAULT_GAME_SCORES));
             user.scores[type][len].failed += 1;
             user.scores[type][len].gamesPlayed += 1;
             user.scores[type][len].totalScore += 8;
@@ -133,7 +131,7 @@ module.exports = {
 
                 if (thisGuess == user.games[type][len].word) {
                     user.scores[type] = user.scores[type] ?? {};
-                    user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+                    user.scores[type][len] = user.scores[type][len] ?? JSON.parse(JSON.stringify(consts.DEFAULT_GAME_SCORES));
                     user.scores[type][len][guesses] += 1;
                     user.scores[type][len].gamesPlayed += 1;
                     user.scores[type][len].totalScore += guesses;
@@ -146,7 +144,7 @@ module.exports = {
         }
 
         user.scores[type] = user.scores[type] ?? {};
-        user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+        user.scores[type][len] = user.scores[type][len] ?? JSON.parse(JSON.stringify(consts.DEFAULT_GAME_SCORES));
         user.scores[type][len].failed += 1;
         user.scores[type][len].gamesPlayed += 1;
         user.scores[type][len].totalScore += 8;
