@@ -48,34 +48,40 @@ module.exports = {
         return (await this.getUser(email)) != null;
     },
 
-    startGame: async function (email, len) {
+    startGame: async function (email, type, len) {
         var newGame = {
             guesses: new Array(6).fill(null),
-            word: await this.getNewAnswer(len)
+            word: await this.getNewAnswer(len),
+            start_time: type == "blitz" ? Math.floor(Date.now() / 1000) : null,
         };
 
-        await this.updateGame(email, newGame, len);
+        await this.updateGame(email, newGame, type, len);
     },
 
-    inGame: async function (email, len) {
-        return (await this.userExists(email) && (await this.getUser(email)).games[len] != null); 
+    inGame: async function (email, type, len) {
+        return (await this.userExists(email) && (await this.getUser(email)).games[type]?.[len]); 
     },
 
-    updateGame: async function (email, game, len) {
+    updateGame: async function (email, game, type, len) {
         const db = dbo.getDb();
         var query = {$set: {}};
-        query.$set['games.' + len] = game
+        query.$set['games.' + type + "." + len] = game;
 
         await db.collection('users').updateOne({email: email}, query);
     },
 
-    gameOver: async function (email, len) {
-        if (!await this.inGame(email, len)) {
+    gameOver: async function (email, type, len) {
+        if (!await this.inGame(email, type, len)) {
             return false;
         }
         var user = await this.getUser(email);
+
+        if (this.timeLeft(user.games[type][len]) < 0) {
+            return true;
+        }
+
         var guesses = 1;
-        for (const guess of user.games[len].guesses) {
+        for (const guess of user.games[type][len].guesses) {
             if (guess == null) {
                 return false;
             } else {
@@ -85,7 +91,7 @@ module.exports = {
                     thisGuess += letter.char;
                 }
 
-                if (thisGuess == user.games[len].word) {
+                if (thisGuess == user.games[type][len].word) {
                     return true;
                 }
             }
@@ -94,13 +100,29 @@ module.exports = {
         return true;
     },
 
-    endGame: async function (email, len) {
-        if (!await this.inGame(email, len)) {
+    timeLeft: function (game) {
+        return (game.start_time != null) ? consts.BLITZ_TIME_SEC - (Math.floor(Date.now() / 1000) - game.start_time) : NaN;
+    },
+
+    endGame: async function (email, type, len) {
+        if (!await this.inGame(email, type, len)) {
             return;
         }
         var user = await this.getUser(email);
+
+        if (this.timeLeft(user.games[type][len]) < 0) {
+            user.scores[type] = user.scores[type] ?? {};
+            user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+            user.scores[type][len].failed += 1;
+            user.scores[type][len].gamesPlayed += 1;
+            user.scores[type][len].totalScore += 8;
+            user.games[type][len] = null;
+            await this.setUser(email, user);
+            return;
+        }
+
         var guesses = 1;
-        for (const guess of user.games[len].guesses) {
+        for (const guess of user.games[type][len].guesses) {
             if (guess == null) {
                 return;
             } else {
@@ -109,37 +131,36 @@ module.exports = {
                     thisGuess += letter.char;
                 }
 
-                if (thisGuess == user.games[len].word) {
-                    if (user.scores[len] == undefined) {
-                        user.scores[len] = consts.DEFAULT_GAME_SCORES;
-                    }
-                    user.scores[len][guesses] += 1;
-                    user.scores[len].gamesPlayed += 1;
-                    user.scores[len].totalScore += guesses;
-                    user.games[len] = null;
+                if (thisGuess == user.games[type][len].word) {
+                    user.scores[type] = user.scores[type] ?? {};
+                    user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+                    user.scores[type][len][guesses] += 1;
+                    user.scores[type][len].gamesPlayed += 1;
+                    user.scores[type][len].totalScore += guesses;
+                    user.games[type][len] = null;
                     await this.setUser(email, user);
                     return;
                 }
             }
             guesses ++;
         }
-        if (user.scores[len] == undefined) {
-            user.scores[len] = consts.DEFAULT_GAME_SCORES;
-        }
-        user.scores[len].failed += 1;
-        user.scores[len].gamesPlayed += 1;
-        user.scores[len].totalScore += 8;
-        user.games[len] = null;
+
+        user.scores[type] = user.scores[type] ?? {};
+        user.scores[type][len] = user.scores[type][len] ?? consts.DEFAULT_GAME_SCORES;
+        user.scores[type][len].failed += 1;
+        user.scores[type][len].gamesPlayed += 1;
+        user.scores[type][len].totalScore += 8;
+        user.games[type][len] = null;
         await this.setUser(email, user);
     },
 
-    makeGuess: async function (email, word, len) {
-        if (await this.validWord(word, len) && await this.inGame(email, len) && !await this.gameOver(email, len)) {
+    makeGuess: async function (email, word, type, len) {
+        if (await this.validWord(word, len) && await this.inGame(email, type, len) && !await this.gameOver(email, type, len)) {
             var set = false;
             var user = await this.getUser(email);
-            user.games[len].guesses = user.games[len].guesses.map(guess => {
+            user.games[type][len].guesses = user.games[type][len].guesses.map(guess => {
                 if (!set && guess == null) {
-                    var answer = user.games[len].word;
+                    var answer = user.games[type][len].word;
                     set = true;
                     word = word.split("")
 
@@ -185,17 +206,38 @@ module.exports = {
         }
     },
 
-    getLeaderboard: async function (len) {
+    getLeaderboard: async function (type, len) {
         const db = dbo.getDb();
         var query = [
             {$match: {}},
-            {$project:{email: "$email", name: "$name", totalScore: ("$scores." + len + ".totalScore"), gamesPlayed: ("$scores." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + len + ".totalScore"), ("$scores." + len + ".gamesPlayed")]}}}, 
+            {$project:{email: "$email", name: "$name", totalScore: ("$scores." + type + "." + len + ".totalScore"), gamesPlayed: ("$scores." + type + "." + len + ".gamesPlayed"), averageScore: {$divide: [("$scores." + type + "." + len + ".totalScore"), ("$scores." + type + "." + len + ".gamesPlayed")]}}}, 
             {$sort:{averageScore: 1}}
         ];
-        query[0].$match["scores." + len + ".gamesPlayed"] = {$gte: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED};
+        query[0].$match["scores." + type + "." + len + ".gamesPlayed"] = {$gte: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED};
 
         return await db.collection('users').aggregate(query);
     },
+
+    updateData: async function () {
+        const db = dbo.getDb();
+        users = await db.collection('users').find().toArray();
+        for (let i = 0; i < users.length; i++) {
+            user = users[i];
+
+            var scores = {
+                'zen': JSON.parse(JSON.stringify(user.scores))
+            }
+
+            var games = {
+                'zen': JSON.parse(JSON.stringify(user.games))
+            }
+
+            user.scores = scores;
+            user.games = games;
+
+            await this.setUser(user.email, user);
+        }
+    }
 
     /*
     migrateData: async function () {
@@ -207,4 +249,5 @@ module.exports = {
         await db.collection('words').updateOne({type: "all"}, query);
     },
     */
+
 }

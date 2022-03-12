@@ -4,25 +4,32 @@ var consts = require('../model/constants');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  res.redirect(req.originalUrl + "/" + consts.DEFAULT_WORD_LEN);
+  res.redirect("/leaderboard/" + consts.DEFAULT_GAME_TYPE + "/" + consts.DEFAULT_WORD_LEN);
 });
 
 /* GET home page. */
-router.get('/:len', async function(req, res, next) {
+router.get('/:type/:len', async function(req, res, next) {
   var db = res.locals.db;
+  var type = req.params.type;
   var len = parseInt(req.params.len, 10);
   var user = res.locals.user
 
-  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
-    return res.redirect(consts.DEFAULT_WORD_LEN);
+  if (!consts.GAME_TYPES.includes(type) || isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+    return res.redirect("/leaderboard");
   }
 
-  var loggedIn = false;
-  if (user !== undefined && user.email_verified) {
-    loggedIn = true;
+  var constants = {
+    MIN_WORD_LEN: consts.MIN_WORD_LEN,
+    MAX_WORD_LEN: consts.MAX_WORD_LEN,
+    DEFAULT_WORD_LEN: consts.DEFAULT_WORD_LEN,
+    DEFAULT_GAME_TYPE: consts.DEFAULT_GAME_TYPE,
+    GAME_TYPES: consts.GAME_TYPES,
+    LEADERBOARD_REQUIRED_GAMES_PLAYED: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED
   }
 
-  var data = await db.getLeaderboard(len);
+  var loggedIn = (user !== undefined && user.email_verified);
+
+  var data = await db.getLeaderboard(type, len);
   var data_array = await data.toArray()
 
   if (loggedIn) {
@@ -69,10 +76,10 @@ router.get('/:len', async function(req, res, next) {
   res.clearCookie("error", { httpOnly: true });
 
   res.render('leaderboard', { 
-    title: len + " Letter Leaderboard",
     leaderboard: leaderboard,
+    type: type,
     len: len,
-    minPlayed: consts.LEADERBOARD_REQUIRED_GAMES_PLAYED,
+    consts: constants,
     error_message: error
   });
 });

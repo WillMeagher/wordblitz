@@ -1,8 +1,10 @@
 extends layout
 
 block head
+    script var time_left = #{time_left}
     script(src="/javascripts/game.js")
     link(rel='stylesheet', href='/stylesheets/game.css')
+    
 
 block content
   div.text-center
@@ -16,7 +18,12 @@ block content
     - var defaultGuess = new Array(parseInt(len, 10)).fill(" ").join("");
 
     div 
-        div.spacer
+        div.spacer.d-flex
+            if (time_left >= 0 && !gameOver)
+                h2#timer.m-auto #{Math.floor(time_left / 60) + ":" + ("0" + (time_left % 60)).slice(-2)}
+            else if (time_left < 0 && game.guesses.filter(x => x !== null).length < 6)
+                h2.m-auto Times Up
+
         each word in game.guesses
             div.d-flex.justify-content-center.text-center
 
@@ -38,7 +45,7 @@ block content
                 else if (first && !allCorrect)
 
                     - allGuesses = false;
-                    form#answer-form.text-center(name="guess", method="post", inputmode='none', action=process.env.APP_URL + "/game/guess/" + len)
+                    form#answer-form.text-center(name="guess", method="post", inputmode='none', action=process.env.APP_URL + "/game/guess/" + type + "/" + len)
                         div(style="height: 0px; width: 0px;")
                             input#guess(style="opacity: 0; height: 0; width: 0;", readonly, type="text", name="guess", value=defaultGuess, maxlength=len, autocomplete="off")
                             input(type="submit", style="display: none")
@@ -56,17 +63,16 @@ block content
                         div.input
                                     
     div.spacer              
-        if (allGuesses && !allCorrect)
-            p.mt-3.answer
+        if (gameOver && !allCorrect)
+            p.m-0.mt-3.answer
                 | The word was 
                 strong #{game.word}
-        if (allGuesses || allCorrect)
+        if (gameOver)
             div.mt-3
-                button.btn.btn-info(onclick="window.location.href='/game/#{len}'") Play Again
-        if (warning != null)
-            p #{warning}
+                button.ms-2.me-2.btn.btn-info(onclick="window.location.href='/game/#{type}/#{len}'") Play Again
+                button.ms-2.me-2.btn.btn-info(onclick="window.location.href='/game'") Back
 
-    if (!(allGuesses || allCorrect))
+    if (!gameOver)
         div#keyboard.top-100.mb-2
             div.d-flex.justify-content-center
                 each char in topRow

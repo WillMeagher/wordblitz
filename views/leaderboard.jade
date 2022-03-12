@@ -7,36 +7,29 @@ block content
   div.container.mt-3(style="max-width:800px;")
     div.card
       div.card-header.d-flex.text-center
-        if (len == 3)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else if (len == 4)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/3", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else if (len == 5)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
+        div.ms-auto.me-auto.d-flex
+          - var type_redirect = consts.GAME_TYPES[Math.max(consts.GAME_TYPES.indexOf(type) - 1, 0)]
+          a.m-2.mt-auto.mb-auto(class = (type == type_redirect) ? "hidden" : "", href=process.env.APP_URL + "/leaderboard/" + type_redirect + "/" + len, style="color: inherit;")
+            i.fa.fa-arrow-left.fa-lg
 
-        h2.m-3.mt-2 #{title}
+          div.m-2
+            h2#game-type.m-0 #{type[0].toUpperCase() + type.substring(1)} Leaderboard
 
-        if (len == 3)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/4", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else if (len == 4)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/5", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else if (len == 5)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/6", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/leaderboard/3", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
+          - var type_redirect = consts.GAME_TYPES[Math.min(consts.GAME_TYPES.indexOf(type) + 1, consts.GAME_TYPES.length - 1)]
+          a.m-2.mt-auto.mb-auto(class = (type == type_redirect) ? "hidden" : "", href=process.env.APP_URL + "/leaderboard/" + type_redirect + "/" + len , style="color: inherit;")
+            i.fa.fa-arrow-right.fa-lg
 
-      - var seen = false;
       div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
+        div.d-flex.mb-2
+          a.ms-auto.mt-auto.mb-auto.me-1(class = (len == consts.MIN_WORD_LEN) ? "hidden" : "", href=process.env.APP_URL + "/leaderboard/" + type + "/" + (len - 1), style="color: inherit;")
+            i.fa.fa-arrow-left(style="font-size: .75em;")
+
+          h3.m-2.mt-0.mb-0 #{len} Letters
+
+          a.me-auto.mt-auto.mb-auto.ms-1(class = (len == consts.MAX_WORD_LEN) ? "hidden" : "", href=process.env.APP_URL + "/leaderboard/" + type + "/" + (len + 1), style="color: inherit;")
+            i.fa.fa-arrow-right(style="font-size: .75em;")
+
+        - var seen = false;
         each user in leaderboard
           div.d-flex
             div.list-item.m-2.ms-auto.me-auto(class=(user.cur_user !== undefined) ? "cur_user" : "", style="width:100%; max-width:600px;")
@@ -49,4 +42,5 @@ block content
               - seen = true;
                 
         if (!seen)
-          div.list-item.m-2.ms-auto.me-auto.cur_user(style="width:100%; max-width:600px;") Play #{minPlayed} games in this category to be on the leaderboard
+          div.d-flex
+            div.list-item.m-2.ms-auto.me-auto.cur_user(style="width:100%; max-width:600px;") Play #{consts.LEADERBOARD_REQUIRED_GAMES_PLAYED} games in this category to be on the leaderboard

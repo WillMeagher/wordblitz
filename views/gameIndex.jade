@@ -1,0 +1,38 @@
+extends layout
+
+block head
+    script
+    script var consts = !{JSON.stringify(consts)}
+    script(src="/javascripts/gameIndex.js")
+    link(rel='stylesheet', href='/stylesheets/gameIndex.css')
+
+block content
+  div.container.mt-3(style="max-width:800px;")
+    div.card
+      div.card-header.d-flex
+        div.ms-auto.me-auto.d-flex
+          #left-type-arrow.arrow.m-2.mt-auto.mb-auto(onclick="decreaseType()", style="color: inherit; visibility: hidden;")
+            i.fa.fa-arrow-left.fa-lg
+
+          div.m-2
+            h2#game-type.m-0 #{consts.DEFAULT_GAME_TYPE[0].toUpperCase() + consts.DEFAULT_GAME_TYPE.substring(1)}
+
+          #right-type-arrow.arrow.m-2.mt-auto.mb-auto(onclick="increaseType()", style="color: inherit;")
+            i.fa.fa-arrow-right.fa-lg
+
+      div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
+        div.d-flex
+          #left-len-arrow.arrow.ms-auto.mt-auto.mb-auto.me-1(onclick="decreaseLen()", style="color: inherit;")
+            i.fa.fa-arrow-left(style="font-size: .75em;")
+
+          h3#word-len.m-2.mt-0.mb-0 #{consts.DEFAULT_WORD_LEN} Letter
+
+          #right-len-arrow.arrow.me-auto.mt-auto.mb-auto.ms-1(onclick="increaseLen()", style="color: inherit;")
+            i.fa.fa-arrow-right(style="font-size: .75em;")
+
+        div.d-flex
+          p#description.m-3.ms-auto.me-auto.text-center(style="width:80%") #{consts.DESCRIPTIONS[consts.DEFAULT_GAME_TYPE]}
+
+        div.d-flex
+          div.btn.btn-info.m-2.ms-auto.me-auto(onclick="play()" style="font-size: 20px") Play            
+        

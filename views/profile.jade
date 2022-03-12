@@ -3,38 +3,30 @@ extends layout
 block content
   div.container.mt-3(style="max-width:800px;")
     div.card
-      div.card-header.d-flex.text-center
-        if (len == 3)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else if (len == 4)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/3", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else if (len == 5)
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
-        else
-          a.ms-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/5", style="color: inherit;")
-            i.fa.fa-arrow-left.fa-15x
+      div.card-header.d-flex
+        div.ms-auto.me-auto.d-flex
+          - var type_redirect = consts.GAME_TYPES[Math.max(consts.GAME_TYPES.indexOf(type) - 1, 0)]
+          a.m-2.mt-auto.mb-auto(class = (type == type_redirect) ? "hidden" : "", href=process.env.APP_URL + "/profile/" + type_redirect + "/" + len, style="color: inherit;")
+            i.fa.fa-arrow-left.fa-lg
 
-        h2.m-3.mt-2 #{title}
+          div.m-2
+            h2#game-type.m-0 #{type[0].toUpperCase() + type.substring(1)} Profile
 
-        if (len == 3)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/4", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else if (len == 4)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/5", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else if (len == 5)
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/6", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
-        else
-          a.me-auto.mt-auto.mb-auto(href=process.env.APP_URL + "/profile/3", style="color: inherit;")
-            i.fa.fa-arrow-right.fa-15x
+          - var type_redirect = consts.GAME_TYPES[Math.min(consts.GAME_TYPES.indexOf(type) + 1, consts.GAME_TYPES.length - 1)]
+          a.m-2.mt-auto.mb-auto(class = (type == type_redirect) ? "hidden" : "", href=process.env.APP_URL + "/profile/" + type_redirect + "/" + len , style="color: inherit;")
+            i.fa.fa-arrow-right.fa-lg
 
       div.card-body(style="font-size:20px; color:black; flex-wrap: wrap;")
-        a(href=process.env.APP_URL + '/game/' + len, style="color: inherit; text-decoration: none;")
-        
+        div.d-flex.mb-2
+          a.ms-auto.mt-auto.mb-auto.me-1(class = (len == consts.MIN_WORD_LEN) ? "hidden" : "", href=process.env.APP_URL + "/profile/" + type + "/" + (len - 1), style="color: inherit;")
+            i.fa.fa-arrow-left(style="font-size: .75em;")
+
+          h3.m-2.mt-0.mb-0 #{len} Letters
+
+          a.me-auto.mt-auto.mb-auto.ms-1(class = (len == consts.MAX_WORD_LEN) ? "hidden" : "", href=process.env.APP_URL + "/profile/" + type + "/" + (len + 1), style="color: inherit;")
+            i.fa.fa-arrow-right(style="font-size: .75em;")
+
+
         if (userScores != undefined && userScores.gamesPlayed > 0)
           div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")
             div
@@ -62,4 +54,6 @@ block content
               div.me-4.mt-2 Average Score : #{(userScores.gamesPlayed != 0) ? Math.round(((userScores.totalScore / userScores.gamesPlayed) + Number.EPSILON) * 100) / 100 : "NA"}
               div.me-4.mt-2 Games Played : #{userScores.gamesPlayed}
         else
-          div.m-2 No Games Played
+          div.d-flex.ms-2.p-2(style="flex-wrap: wrap;")
+            div
+              div No Games Played

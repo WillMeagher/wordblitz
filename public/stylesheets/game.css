@@ -83,7 +83,7 @@ i {
 }
 
 .spacer {
-  height: 5px;
+  min-height: max(calc(50vh - 350px), 5px);
 }
 
 .mt-40 {

@@ -22,25 +22,36 @@ router.use(requiresAuth(), async function (req, res, next) {
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
-  res.redirect(req.originalUrl + "/" + consts.DEFAULT_WORD_LEN);
+  res.redirect("/profile/" + consts.DEFAULT_GAME_TYPE + "/" + consts.DEFAULT_WORD_LEN);
 });
 
-router.get('/:len', async function (req, res, next) {
+router.get('/:type/:len', async function (req, res, next) {
   var db = res.locals.db;
+  var type = req.params.type;
   var len = parseInt(req.params.len, 10);
   var email = res.locals.user.email;
 
-  if (isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
-    return res.redirect(consts.DEFAULT_WORD_LEN);
+  if (!consts.GAME_TYPES.includes(type) || isNaN(len) || len < consts.MIN_WORD_LEN || len > consts.MAX_WORD_LEN) {
+    return res.redirect("/profile");
   }
 
   var error = req.cookies["error"];
   res.clearCookie("error", { httpOnly: true });
 
+  
+  var constants = {
+    MIN_WORD_LEN: consts.MIN_WORD_LEN,
+    MAX_WORD_LEN: consts.MAX_WORD_LEN,
+    DEFAULT_WORD_LEN: consts.DEFAULT_WORD_LEN,
+    DEFAULT_GAME_TYPE: consts.DEFAULT_GAME_TYPE,
+    GAME_TYPES: consts.GAME_TYPES,
+  }
+
   res.render('profile', {
-    title: "Profile " + len + " Letters" ,
+    type: type,
     len: len,
-    userScores: (await db.getUser(email)).scores[len],
+    consts: constants,
+    userScores: (await db.getUser(email)).scores[type]?.[len],
     error_message: error
   });
 });

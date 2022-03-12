@@ -2,9 +2,12 @@ const INPUT_ID = "guess";
 const FOCUS_CLASS = "focus";
 const CUR_INPUT_CLASS = "cur-input";
 const FORM_ID = "answer-form";
-var caret_place = 0;
 const SPACER_CLASS = "spacer";
+const TIMER_ID = "timer";
+var caret_place = 0;
 var submitted = false;
+
+setInterval(updateCountdown, 1000);
 
 // on actual keyboard keypress
 document.addEventListener('keydown', function (event) {
@@ -12,19 +15,30 @@ document.addEventListener('keydown', function (event) {
     enterInput(key);
 });
 
-window.addEventListener('load', function (event) {
+window.addEventListener('load', function () {
     updateSpacerSize();
 });
 
-window.addEventListener('resize', function (event) {
+window.addEventListener('resize', function () {
     updateSpacerSize();
 });
+
+function updateCountdown() {
+    if (isNaN(time_left) || document.getElementById(TIMER_ID) == undefined) return;
+    --time_left;
+    var timer = document.getElementById(TIMER_ID);
+    if (time_left < 0) {
+        location.reload();
+    } else {
+        timer.innerHTML = Math.floor(time_left / 60) + ":" + ("0" + (time_left % 60)).slice(-2);
+    }
+}
 
 function updateSpacerSize() {
     spacers = document.getElementsByClassName(SPACER_CLASS);
-    width = Math.max(.5 * window.innerHeight - 350, 5);
+    height = Math.max(.5 * window.innerHeight - 350, 5);
     for (i = 0; i < spacers.length; i++) {
-        spacers[i].style.height = width.toString() + "px";
+        spacers[i].style.minHeight = height.toString() + "px";
     }
 }
 
