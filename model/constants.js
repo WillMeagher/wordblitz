@@ -20,8 +20,8 @@ module.exports = {
     LEADERBOARD_REQUIRED_GAMES_PLAYED: 5,
     BLITZ_TIME_SEC: 3 * 60,
     DESCRIPTIONS: {
-        blitz: "Blitz is a fast paced gamemode where you will just have 3 minutes to guess the word. As long as you guess the word in the allotted time your time remaining does not matter however the number of guesses it takes you does matter.",
-        zen: "Zen is a casual gamemode where you can take as much time as you want to guess the word. Rankings are baised on how many guesses it takes you to get the word so choose your guesses carefully.",
+        blitz: "Blitz is a fast paced game mode where you have 3 minutes to guess the word. While you have to beat the clock, your final time is not incorperated into your score.",
+        zen: "Zen is a casual game mode where you can take as much time as you want to guess the word. Rankings are based on how many guesses it takes you to get the word so choose your guesses carefully.",
     }
 
 }
