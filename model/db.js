@@ -99,7 +99,7 @@ module.exports = {
     },
 
     timeLeft: function (game) {
-        return (game.start_time != null) ? consts.BLITZ_TIME_SEC - (Math.floor(Date.now() / 1000) - game.start_time) : NaN;
+        return (game && game.start_time) ? consts.BLITZ_TIME_SEC - (Math.floor(Date.now() / 1000) - game.start_time) : NaN;
     },
 
     endGame: async function (email, type, len) {
