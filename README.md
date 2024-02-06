@@ -1,4 +1,4 @@
-# wordblitz
+# Word Blitz
 
 Word Blitz is a word game similar to the popular game wordle. Word Blitz allows users to play an unlimited number of games per day. Additionally, users can choose between a 3-minute timed blitz mode and a casual zen mode. Users can also select how many letters they would like in the word they are guessing. Users can choose anywhere between 3-and 6 letters. Word Blitz also includes a user profile where users can see a graph of all their previous games and a leaderboard where a user can compare their scores to others. 
 
